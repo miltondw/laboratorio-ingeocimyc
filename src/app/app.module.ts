@@ -19,13 +19,23 @@ import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 //Components
 import { HeaderComponent } from './components/header/header.component';
 import { FormHeaderComponent } from './components/forms/form-header/form-header.component';
+import { FormEnsayoDeHumedadComponent } from './components/forms/form-ensayo-de-humedad/form-ensayo-de-humedad.component';
+import { FormGranulometriaComponent } from './components/forms/form-granulometria/form-granulometria.component';
+import { FormLimiteLiquidoComponent } from './components/forms/form-limite-liquido/form-limite-liquido.component';
+import { FormLimitePlasticoComponent } from './components/forms/form-limite-plastico/form-limite-plastico.component';
+import { FormFooterComponent } from './components/forms/form-footer/form-footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     EnsayosComponent,
     HeaderComponent,
-    FormHeaderComponent
+    FormHeaderComponent,
+    FormEnsayoDeHumedadComponent,
+    FormGranulometriaComponent,
+    FormLimiteLiquidoComponent,
+    FormLimitePlasticoComponent,
+    FormFooterComponent
   ],
   imports: [
     BrowserModule,
