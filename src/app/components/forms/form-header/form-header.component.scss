@@ -1,0 +1,21 @@
+form {
+  margin-top: 2rem;
+  padding: 0 2rem;
+  h2 {
+    font-size: 18px;
+    margin: 1rem;
+  }
+  .content_fields {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.7rem;
+  }
+  .content_field {
+    &.location {
+      display: flex;
+    }
+    mat-form-field {
+      width: 100%;
+    }
+  }
+}
