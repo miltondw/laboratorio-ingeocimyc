@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button'
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatRadioModule } from '@angular/material/radio';
+import {MatTableModule} from '@angular/material/table';
+
 //Pages
 import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 //Components
@@ -49,7 +51,8 @@ import { FormFooterComponent } from './components/forms/form-footer/form-footer.
     MatInputModule,
     MatSelectModule,
     MatSliderModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
