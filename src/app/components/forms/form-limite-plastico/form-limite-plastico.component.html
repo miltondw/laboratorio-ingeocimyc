@@ -1,1 +1,46 @@
-<p>form-limite-plastico works!</p>
+<form>
+  <h2 class="title">Limite Plástico</h2>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="prueba">
+        <th mat-header-cell *matHeaderCellDef>Prueba.</th>
+        <td mat-cell *matCellDef="let element">{{ element.prueba }}</td>
+      </ng-container>
+      <ng-container matColumnDef="primera">
+        <th mat-header-cell *matHeaderCellDef>1</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-form-field appearance="outline">
+        <mat-label>Primera</mat-label>
+        <input matInput>
+      </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="segunda">
+        <th mat-header-cell *matHeaderCellDef>2</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-form-field appearance="outline">
+        <mat-label>Segunda</mat-label>
+        <input matInput>
+      </mat-form-field>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="tercera">
+        <th mat-header-cell *matHeaderCellDef>3</th>
+        <td mat-cell *matCellDef="let element">
+        <mat-form-field appearance="outline">
+        <mat-label>Tercera</mat-label>
+        <input matInput>
+      </mat-form-field>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div class="footer">
+      <div class="observaciones">
+        <label for="observaciones">
+          Observaciones:
+        </label>
+        <textarea name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
+      </div>
+    </div>
+</form>
