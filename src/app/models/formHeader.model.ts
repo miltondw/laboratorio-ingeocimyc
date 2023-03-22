@@ -1,4 +1,4 @@
-export interface HeaderI{
+export interface IHeader{
 location:string;
 typeOfSample:string;
 TareWeight:number;
