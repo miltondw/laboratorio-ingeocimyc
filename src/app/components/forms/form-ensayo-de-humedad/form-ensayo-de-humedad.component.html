@@ -1,4 +1,4 @@
-<form>
+<form [formGroup]="form">
 <h2 class="title">Ensayo de humedad</h2>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container matColumnDef="prueba">
@@ -10,25 +10,7 @@
       <td mat-cell *matCellDef="let element">
         <mat-form-field appearance="outline">
       <mat-label>Primera</mat-label>
-      <input matInput>
-    </mat-form-field>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="segunda">
-      <th mat-header-cell *matHeaderCellDef>2</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-form-field appearance="outline">
-      <mat-label>Segunda</mat-label>
-      <input matInput>
-    </mat-form-field>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="tercera">
-      <th mat-header-cell *matHeaderCellDef>3</th>
-      <td mat-cell *matCellDef="let element">
-      <mat-form-field appearance="outline">
-      <mat-label>Tercera</mat-label>
-      <input matInput>
+      <input matInput [formControlName]="element.primera">
     </mat-form-field>
       </td>
     </ng-container>
@@ -40,20 +22,23 @@
       <label for="observaciones">
         Observaciones:
       </label>
-      <textarea name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
+      <textarea formControlName="observation" name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
     </div>
     <div class="cilindro">
       <img src="/assets/cilindro.svg" alt="">
-      <div>
+      <div formGroupName="cylinder">
         <mat-form-field appearance="outline">
           <mat-label>Diámetro</mat-label>
-          <input matInput>
+          <input matInput formControlName="diameter">
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>Altura</mat-label>
-          <input matInput>
+          <input matInput formControlName="height">
         </mat-form-field>
       </div>
     </div>
   </div>
+  <button (click)="onSubmit()">
+    Guardar
+  </button>
 </form>

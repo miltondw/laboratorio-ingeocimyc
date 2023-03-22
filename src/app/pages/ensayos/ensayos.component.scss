@@ -4,8 +4,9 @@
   grid-template-columns: 1fr 1fr;
   padding: 0.5rem 1rem;
   grid-gap: 1rem;
-  height: 100vh;
-  overflow-y: scroll;
+  // height: 100vh;
+  // overflow-y: scroll;
+  margin-top: 2rem;
 }
 .content-form_l_p {
   overflow: inherit;
