@@ -1,7 +1,7 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import {IHeader} from '@app/models/formHeader.model'
-import {FormHeaderService} from '@app/services/form-header.service'
+import { IHeader } from '@app/models/formHeader.model'
+import { ProjectService } from '@app/services/project.service'
 @Component({
   selector: 'app-form-header',
   templateUrl: './form-header.component.html',
@@ -9,45 +9,55 @@ import {FormHeaderService} from '@app/services/form-header.service'
 })
 export class FormHeaderComponent implements OnInit {
   form: FormGroup = new FormGroup({});
-  values:IHeader|null=null
-  valuesHeader$=this.headerServices.valuesHeader$
-  activeEdit=false
+  values: IHeader | null = null
+  activeEdit = true
+  projectIdValue:string|null=""
+  date:Date=new Date()
+  @Input() set projectId(id:string|null){
+    this.projectIdValue=id
+    if(id) {
+      const project=this.projectService.getProject(id)
+      this.form.patchValue(project.header)
+      this.values=this.form.value
+      this.date=project.date
+    }
+  }
   constructor (
     private fb: FormBuilder,
-    private headerServices:FormHeaderService
-    ) {
+    private projectService: ProjectService
+  ) {
     this.buildForm()
   }
-  ngOnInit(){
-    this.valuesHeader$.subscribe(v=>{
-      this.values=v
-      if(v){
-        this.form.patchValue(v)
-      }
-    })
+  ngOnInit() {
+    if(this.projectIdValue && this.projectService.project?.header?.location){
+      this.form.patchValue(this.projectService.project.header)
+    }
+    if (!this.values) {
+      this.activeEdit = true
+    }
   }
   private buildForm() {
     this.form = this.fb.group({
       location: ['', [Validators.required]],
-      typeOfSample: ['',[Validators.required]],
-      TareWeight: ['', [Validators.required]],
-      probe: ['', [Validators.required]],
-      layer: ['', [Validators.required]],
-      sampleWeightH: ['', [Validators.required]]
+      TareWeight: [''],
+      probe: [''],
+      layer: [''],
+      sampleWeightH: ['']
     });
   }
   onSubmit() {
     if (this.form.valid) {
       this.values=this.form.value
-      if(this.values){
-        this.headerServices.saveStorage(this.values)
-        this.activeEdit=false
+      if (this.values && this.projectIdValue) {
+        this.projectService.createHeader(this.values,this.projectIdValue)
+        console.log(this.values,"form")
+        this.activeEdit = false
       }
     } else {
       this.form.markAllAsTouched()
     }
   }
-  onActiveEdit(){
-    this.activeEdit=true
+  onActiveEdit() {
+    this.activeEdit = true
   }
 }

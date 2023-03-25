@@ -1,46 +1,64 @@
-<form>
+<form [formGroup]="form">
   <h2 class="title">Limite Liquido</h2>
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-      <ng-container matColumnDef="prueba">
+      <ng-container  matColumnDef="prueba">
         <th mat-header-cell *matHeaderCellDef>Prueba.</th>
         <td mat-cell *matCellDef="let element">{{ element.prueba }}</td>
       </ng-container>
-      <ng-container matColumnDef="primera">
+
+      <ng-container matColumnDef="primera" formGroupName="primera">
         <th mat-header-cell *matHeaderCellDef>1</th>
         <td mat-cell *matCellDef="let element">
-          <mat-form-field appearance="outline">
-        <mat-label>Primera</mat-label>
-        <input matInput>
-      </mat-form-field>
+          <p *ngIf="!activeEdit && values?.primera" >
+            {{values?.primera[element.primera]}}
+           </p>
+         <mat-form-field appearance="outline" *ngIf="activeEdit" >
+           <mat-label>Primera</mat-label>
+           <input matInput [formControlName]="element.primera">
+         </mat-form-field>
         </td>
       </ng-container>
-      <ng-container matColumnDef="segunda">
+      <ng-container matColumnDef="segunda" formGroupName="segunda">
         <th mat-header-cell *matHeaderCellDef>2</th>
         <td mat-cell *matCellDef="let element">
-          <mat-form-field appearance="outline">
-        <mat-label>Segunda</mat-label>
-        <input matInput>
-      </mat-form-field>
+          <p *ngIf="!activeEdit && values?.segunda" >
+            {{values?.segunda[element.primera]}}
+           </p>
+         <mat-form-field appearance="outline" *ngIf="activeEdit" >
+           <mat-label>Segunda</mat-label>
+           <input matInput [formControlName]="element.primera">
+         </mat-form-field>
         </td>
       </ng-container>
-      <ng-container matColumnDef="tercera">
+      <ng-container matColumnDef="tercera" formGroupName="tercera">
         <th mat-header-cell *matHeaderCellDef>3</th>
         <td mat-cell *matCellDef="let element">
-        <mat-form-field appearance="outline">
-        <mat-label>Tercera</mat-label>
-        <input matInput>
-      </mat-form-field>
-        </td>
+          <p *ngIf="!activeEdit && values?.tercera" >
+            {{values?.tercera[element.primera]}}
+           </p>
+         <mat-form-field appearance="outline" *ngIf="activeEdit" >
+           <mat-label>Tercera</mat-label>
+           <input matInput [formControlName]="element.primera">
+         </mat-form-field>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
     <div class="footer">
-      <div class="observaciones">
+      <p *ngIf="!activeEdit && values.observation" >
+        Observaciones: {{values.observation}}
+      </p>
+      <div *ngIf="activeEdit" class="observaciones">
         <label for="observaciones">
           Observaciones:
         </label>
-        <textarea name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
+        <textarea formControlName="observation" name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
       </div>
     </div>
+    <button class="btn_primary" *ngIf="activeEdit" (click)="onSubmit()">
+      Guardar
+    </button>
+    <button class="btn_primary" *ngIf="!activeEdit" type="button" (click)="onActiveEdit()">
+      Editar
+    </button>
 </form>

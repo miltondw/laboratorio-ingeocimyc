@@ -25,9 +25,14 @@ form {
   .content_field {
     width: 100%;
     &.location {
-      display: flex;
+      display: grid !important;
+      grid-template-columns: 80% 20%;
+      gap: 1rem;
       p {
         text-align: left;
+      }
+      .date{
+        text-align: center;
       }
     }
     mat-form-field {
@@ -37,23 +42,7 @@ form {
     }
   }
   button {
-    height: fit-content;
-    width: 100%;
-    padding: 0.7rem;
-    background: #b1d476;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    transition: 600ms transform;
     z-index: 10;
-    cursor: pointer;
-    &:hover {
-      background: #8ba460;
-    }
-    &:active {
-      transform: scale(0.9);
-      transition: 600ms transform;
-    }
+    width: 100%;
   }
 }

@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { Validators, FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ELEMENT_DATA } from './data'
 import { EnsayoDeHumedadService } from '@app/services/ensayo-de-humedad.service'
+import { ProjectService } from '@app/services/project.service'
 import { IHumedad } from '@app/models/ensayoDeHumedad.model'
+import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
+
 @Component({
   selector: 'app-form-ensayo-de-humedad',
   templateUrl: './form-ensayo-de-humedad.component.html',
@@ -15,21 +18,22 @@ export class FormEnsayoDeHumedadComponent {
   ];
   dataSource = ELEMENT_DATA;
   form: FormGroup = new FormGroup({});
-  activeEdit = false
+  activeEdit = true
   valuesHumidity$ = this.humedadServices.valuesHumidity$
-  values: IHumedad | null = null
+  values: IHumedad | any = {};
   constructor (
     private fb: FormBuilder,
-    private humedadServices: EnsayoDeHumedadService
+    private humedadServices: EnsayoDeHumedadService,
+    private projectService: ProjectService
   ) {
     this.buildForm()
   }
   ngOnInit() {
     this.valuesHumidity$.subscribe(v => {
-      this.values = v
       if (v) {
+        this.values = v
         this.form.patchValue(v)
-        console.log(v)
+        this.activeEdit = false
       }
     })
   }
@@ -44,8 +48,8 @@ export class FormEnsayoDeHumedadComponent {
       HumidityContent: [''],
       observation: [''],
       cylinder: this.fb.group({
-        diameter: ['', [Validators.required]],
-        height: ['', [Validators.required]],
+        diameter: [''],
+        height: [''],
       })
     });
   }
@@ -53,19 +57,21 @@ export class FormEnsayoDeHumedadComponent {
     if (this.form.valid) {
       this.values = this.form.value
       if (this.values) {
-        if (this.values?.TarePlusDrySoilP3 && this.values?.TareWeightP1) {
-          //Peso del suelo seco
-          this.values.DrySoilWeight = Number((this.values.TarePlusDrySoilP3 - this.values.TareWeightP1).toFixed(2))
-        }
-        if (this.values?.TarePlusWetSoilWeightP2 && this.values?.TarePlusDrySoilP3) {
-          //Peso del agua
-          this.values.WeightOfWaterGrs = Number((this.values.TarePlusWetSoilWeightP2 - this.values.TarePlusDrySoilP3).toFixed(2))
-        }
-        if (this.values?.DrySoilWeight && this.values?.WeightOfWaterGrs) {
-          //Contenido de humedad
-          this.values.HumidityContent = Number((this.values.WeightOfWaterGrs / this.values.DrySoilWeight).toFixed(2))
+        if (this.values?.TareWeightP1 &&
+          this.values?.TarePlusDrySoilP3 &&
+          this.values?.TarePlusWetSoilWeightP2
+        ) {
+          const valuesPesos = waterSoilHumidity(
+            this.values?.TareWeightP1,
+            this.values?.TarePlusDrySoilP3,
+            this.values?.TarePlusWetSoilWeightP2
+          )
+          this.values.DrySoilWeight = valuesPesos.pesoSuelo
+          this.values.WeightOfWaterGrs = valuesPesos.pesoAgua
+          this.values.HumidityContent = valuesPesos.humedad
         }
         this.humedadServices.saveStorage(this.values)
+        this.projectService.createEnsayoHumedad(this.values, this.projectService.project.id)
         this.form.patchValue(this.values)
         this.activeEdit = false
       }

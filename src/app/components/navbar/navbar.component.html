@@ -1,0 +1,15 @@
+<nav>
+  <button (click)="activeNav=!activeNav" >
+    Menu
+  </button>
+  <ul [class.active]="activeNav">
+    <li *ngFor="let item of itemList" >
+      <a
+      routerLinkActive="active"
+      [routerLink]="['laboratorio/',item.split(' ').join('-').toLocaleLowerCase()]"
+      >
+      {{item}}
+    </a>
+    </li>
+  </ul>
+</nav>

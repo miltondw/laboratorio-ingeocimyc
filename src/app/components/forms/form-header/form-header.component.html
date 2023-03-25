@@ -15,25 +15,9 @@
   >
     Este campo es requerido
   </mat-error>
+  <p class="date">{{date | date:'dd-MM-yyyy' }}</p>
   </div>
   <div class="content_fields" >
-    <div class="content_field">
-      <p *ngIf="values?.typeOfSample && !activeEdit" >
-        Tipo de muestra: <span>{{values?.typeOfSample}} </span>
-    </p>
-      <mat-form-field appearance="outline" *ngIf="!values?.typeOfSample || activeEdit" >
-        <mat-label>Tipo de muestra</mat-label>
-        <input matInput formControlName="typeOfSample" />
-      </mat-form-field>
-      <mat-error
-        *ngIf="
-          form.get('typeOfSample')?.hasError('required') &&
-          form.get('typeOfSample')?.touched
-        "
-      >
-        Este campo es requerido
-      </mat-error>
-    </div>
     <div class="content_field">
       <p *ngIf="values?.TareWeight && !activeEdit" >
         Peso Tara: <span>{{values?.TareWeight}} </span>
@@ -42,14 +26,6 @@
         <mat-label>Peso Tara</mat-label>
         <input matInput formControlName="TareWeight" type="number" />
       </mat-form-field>
-       <mat-error
-        *ngIf="
-          form.get('TareWeight')?.hasError('required') &&
-          form.get('TareWeight')?.touched
-        "
-      >
-        Este campo es requerido
-      </mat-error>
     </div>
     <div class="content_field">
       <p *ngIf="values?.probe && !activeEdit" >
@@ -59,14 +35,6 @@
         <mat-label>Sondeo N°</mat-label>
         <input matInput formControlName="probe" type="number" />
       </mat-form-field>
-       <mat-error
-        *ngIf="
-          form.get('probe')?.hasError('required') &&
-          form.get('probe')?.touched
-        "
-      >
-        Este campo es requerido
-      </mat-error>
     </div>
     <div class="content_field">
       <p *ngIf="values?.layer && !activeEdit" >
@@ -76,14 +44,6 @@
         <mat-label>Capa</mat-label>
         <input matInput formControlName="layer" />
       </mat-form-field>
-       <mat-error
-        *ngIf="
-          form.get('layer')?.hasError('required') &&
-          form.get('layer')?.touched
-        "
-      >
-        Este campo es requerido
-      </mat-error>
     </div>
     <div class="content_field">
       <p *ngIf="values?.sampleWeightH && !activeEdit" >
@@ -93,19 +53,11 @@
         <mat-label>Peso Muestra H</mat-label>
         <input matInput formControlName="sampleWeightH" type="number" />
       </mat-form-field>
-       <mat-error
-        *ngIf="
-          form.get('sampleWeightH')?.hasError('required') &&
-          form.get('sampleWeightH')?.touched
-        "
-      >
-        Este campo es requerido
-      </mat-error>
     </div>
-    <button *ngIf="activeEdit" type="button" (click)="onSubmit()">
+    <button class="btn_primary" *ngIf="activeEdit" type="button" (click)="onSubmit()">
       Guardar
     </button>
-    <button *ngIf="!activeEdit" type="button" (click)="onActiveEdit()">
+    <button class="btn_primary" *ngIf="!activeEdit" type="button" (click)="onActiveEdit()">
       Editar
     </button>
   </div>

@@ -1,0 +1,19 @@
+<form [formGroup]="form" >
+  <mat-form-field appearance="outline">
+    <mat-label>Nombre del Proyecto</mat-label>
+    <input matInput formControlName="location">
+  </mat-form-field>
+  <mat-error
+  *ngIf="
+    form.get('location')?.hasError('required') &&
+    form.get('location')?.touched
+  "
+>
+  Este campo es requerido
+</mat-error>
+  <mat-form-field appearance="outline">
+    <mat-label>Cantidad de sondeos</mat-label>
+    <input matInput type="number" formControlName="probe">
+  </mat-form-field>
+  <button class="btn_primary" (click)="onSubmit()">Enviar</button>
+</form>

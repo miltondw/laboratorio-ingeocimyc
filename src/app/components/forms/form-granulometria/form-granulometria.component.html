@@ -1,12 +1,5 @@
 <h2 class="title">Granulometría</h2>
-<form>
-  <div class="header">
-    <mat-form-field appearance="outline">
-      <mat-label>Peso Inicial</mat-label>
-      <input matInput>
-    </mat-form-field>
-    <p>GRS</p>
-  </div>
+<form [formGroup]="form">
   <div class="titles">
   <h3>Tamiz</h3>
   <h3>Peso Retenido</h3>
@@ -23,17 +16,22 @@
     <ng-container matColumnDef="gr">
       <th mat-header-cell *matHeaderCellDef>gr</th>
       <td mat-cell *matCellDef="let element">
-        <mat-form-field appearance="outline">
+        <p *ngIf="!activeEdit" >
+          {{values[element.gr]?values[element.gr]:'---'}}
+         </p>
+        <mat-form-field  appearance="outline" *ngIf="activeEdit" >
           <mat-label>Gr</mat-label>
-          <input matInput>
+          <input matInput [formControlName]="element.gr">
         </mat-form-field>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <div class="total">
-    <p>Total</p>
-    <p>12300,0</p>
-  </div>
+  <button class="btn_primary" *ngIf="activeEdit" (click)="onSubmit()">
+    Guardar
+  </button>
+  <button class="btn_primary" *ngIf="!activeEdit" type="button" (click)="onActiveEdit()">
+    Editar
+  </button>
 </form>

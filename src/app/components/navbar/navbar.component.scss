@@ -1,0 +1,56 @@
+nav {
+  position: relative;
+  height: 2.5rem;
+  width: 150px;
+  z-index:100;
+  button {
+    background: #008380;
+    color: white;
+    outline: none;
+    font-size: 18px;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    margin: 0;
+    box-shadow: -6px 2px 5px 5px #625757;
+    height: 100%;
+    width: 150px;
+  }
+  ul {
+    list-style: none;
+    background: #008380;
+    margin: 0;
+    padding: 1rem;
+    box-shadow: 1px 1px 12px 0px;
+    width: auto;
+    position: absolute;
+    transform: translateX(-125%);
+    transition: 300ms transform;
+    top: 2.6rem;
+    &.active {
+      transform: translateX(0);
+      transition: 300ms transform;
+    }
+    li {
+      margin: 1rem 0;
+      a {
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        border: 1px solid #b9b9b9;
+        padding: 0.3rem;
+        background: #999999;
+        border-radius: 4px;
+        text-transform: capitalize;
+        font-weight: 500;
+        transition: 300ms transform;
+        display: inline-block;
+        &:hover {
+          background: #b1d476;
+          transform: scale(1.1);
+          transition: 300ms transform;
+        }
+      }
+    }
+  }
+}

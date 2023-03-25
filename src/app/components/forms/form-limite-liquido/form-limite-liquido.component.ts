@@ -1,62 +1,10 @@
 import { Component } from '@angular/core';
-export interface PeriodicElement {
-  prueba: string;
-  primera: number;
-  segunda: number;
-  tercera: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    prueba: 'N° De Golpes',
-    primera: 12,
-    segunda: 1,
-    tercera: 32
-  },
-  {
-    prueba: 'Tara N°',
-    primera: 12,
-    segunda: 4,
-    tercera: 32
-  },
-  {
-    prueba: 'Peso Tara',
-    primera: 12,
-    segunda: 4,
-    tercera: 32
-  },
-  {
-    prueba: 'Peso Tara + peso suelo húmedo',
-    primera: 12,
-    segunda: 14,
-    tercera: 32
-  },
-  {
-    prueba: 'Peso Tara + Suelo seco',
-    primera: 12,
-    segunda: 6,
-    tercera: 32
-  },
-  {
-    prueba: 'Peso del agua',
-    primera: 12,
-    segunda: 10,
-    tercera: 32,
-  },
-  {
-    prueba: 'Peso del Suelo seco',
-    primera: 12,
-    segunda: 9,
-    tercera: 32
-  },
-
-  {
-    prueba: '% Humedad',
-    primera: 12,
-    segunda: 12,
-    tercera: 32,
-  },
-];
+import { ELEMENT_DATA } from './data'
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { EnsayoDeLimiteLiquidoService } from '@app/services/ensayo-de-limite-liquido.service'
+import { ProjectService } from '@app/services/project.service'
+import { IGroup } from '@app/models/ensayoDeLimiteLiquido.model'
+import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
 @Component({
   selector: 'app-form-limite-liquido',
   templateUrl: './form-limite-liquido.component.html',
@@ -70,4 +18,91 @@ export class FormLimiteLiquidoComponent {
     'tercera'
   ];
   dataSource = ELEMENT_DATA;
+  form: FormGroup = new FormGroup({});
+  activeEdit = true
+  valuesLiquido$ = this.liquidoService.valuesLiquido$
+  values: IGroup | any = {};
+  stringValues = ["primera", "segunda", "tercera"]
+  constructor (
+    private fb: FormBuilder,
+    private liquidoService: EnsayoDeLimiteLiquidoService,
+    private projectService: ProjectService
+  ) {
+    this.buildForm()
+  }
+  ngOnInit() {
+    this.valuesLiquido$.subscribe(v => {
+      if (v) {
+        this.values = v
+        this.form.patchValue(v)
+        this.activeEdit = false
+      }
+    })
+  }
+  private buildForm() {
+    this.form = this.fb.group({
+      primera: this.fb.group({
+        NumberOfStrokes: [''],
+        TareNumber: [''],
+        TareWeight: ['',],
+        TarePlusWetSoilWeight: [''],
+        TarePlusDrySoil: [''],
+        WaterWeight: [''],
+        DrySoilWeight: [''],
+        Humidity: [''],
+      }),
+      segunda: this.fb.group({
+        NumberOfStrokes: [''],
+        TareNumber: [''],
+        TareWeight: ['',],
+        TarePlusWetSoilWeight: [''],
+        TarePlusDrySoil: [''],
+        WaterWeight: [''],
+        DrySoilWeight: [''],
+        Humidity: [''],
+      }),
+      tercera: this.fb.group({
+        NumberOfStrokes: [''],
+        TareNumber: [''],
+        TareWeight: ['',],
+        TarePlusWetSoilWeight: [''],
+        TarePlusDrySoil: [''],
+        WaterWeight: [''],
+        DrySoilWeight: [''],
+        Humidity: [''],
+      }),
+      observation: ['']
+    });
+  }
+  onSubmit() {
+    if (this.form.valid) {
+      this.values = this.form.value
+      if (this.values) {
+        this.stringValues.map(stringValue => {
+          if (this.values[stringValue].TareWeight
+            && this.values[stringValue].TarePlusDrySoil
+            && this.values[stringValue].TarePlusWetSoilWeight
+          ) {
+            const valuesPesos = waterSoilHumidity(
+              this.values[stringValue].TareWeight,
+              this.values[stringValue].TarePlusDrySoil,
+              this.values[stringValue].TarePlusWetSoilWeight
+            )
+            this.values[stringValue].DrySoilWeight = valuesPesos.pesoSuelo
+            this.values[stringValue].WaterWeight = valuesPesos.pesoAgua
+            this.values[stringValue].Humidity = valuesPesos.humedad
+          }
+        })
+        this.liquidoService.saveStorage(this.values)
+        this.projectService.createEnsayoLiquido(this.values,this.projectService.project.id)
+        this.form.patchValue(this.values)
+        this.activeEdit = false
+      }
+    } else {
+      this.form.markAllAsTouched()
+    }
+  }
+  onActiveEdit() {
+    this.activeEdit = true
+  }
 }
