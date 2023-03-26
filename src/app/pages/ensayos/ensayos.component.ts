@@ -12,7 +12,7 @@ constructor(
   private route: ActivatedRoute,
 ){}
 ngOnInit(): void {
-  this.route.paramMap.subscribe((paramsRoute) => this.projectId = paramsRoute.get('id'))
-  console.log(this.projectId)
+  this.route.paramMap
+  .subscribe((paramsRoute) => this.projectId = paramsRoute.get('id'))
 }
 }

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ELEMENT_DATA } from './data'
-import { EnsayoDeHumedadService } from '@app/services/ensayo-de-humedad.service'
 import { ProjectService } from '@app/services/project.service'
 import { IHumedad } from '@app/models/ensayoDeHumedad.model'
 import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
@@ -19,23 +18,19 @@ export class FormEnsayoDeHumedadComponent {
   dataSource = ELEMENT_DATA;
   form: FormGroup = new FormGroup({});
   activeEdit = true
-  valuesHumidity$ = this.humedadServices.valuesHumidity$
   values: IHumedad | any = {};
+    projectIdValue: string = ""
   constructor (
     private fb: FormBuilder,
-    private humedadServices: EnsayoDeHumedadService,
     private projectService: ProjectService
   ) {
     this.buildForm()
   }
-  ngOnInit() {
-    this.valuesHumidity$.subscribe(v => {
-      if (v) {
-        this.values = v
-        this.form.patchValue(v)
-        this.activeEdit = false
-      }
-    })
+ ngOnInit() {
+    this.projectIdValue = this.projectService.project.id
+    const project = this.projectService.project
+    this.form.patchValue(project.ensayoHumedad)
+    this.values = this.form.value
   }
   private buildForm() {
     this.form = this.fb.group({
@@ -70,8 +65,12 @@ export class FormEnsayoDeHumedadComponent {
           this.values.WeightOfWaterGrs = valuesPesos.pesoAgua
           this.values.HumidityContent = valuesPesos.humedad
         }
-        this.humedadServices.saveStorage(this.values)
-        this.projectService.createEnsayoHumedad(this.values, this.projectService.project.id)
+        this.projectService.createEnsayo(
+          {
+            ensayoHumedad: this.values,
+            ensayo: 'ensayoHumedad',
+            id: this.projectIdValue
+          })
         this.form.patchValue(this.values)
         this.activeEdit = false
       }

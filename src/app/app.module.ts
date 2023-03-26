@@ -31,6 +31,7 @@ import { NgModule } from '@angular/core';
   import { FormCreateEnsayoComponent } from './components/forms/form-create-ensayo/form-create-ensayo.component';
   import { LayoutComponent } from './components/layout/layout.component';
   import { NavbarComponent } from './components/navbar/navbar.component';
+import { ProjectListComponent } from './components/project-list/project-list.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NgModule } from '@angular/core';
     FormCreateEnsayoComponent,
     LayoutComponent,
     NavbarComponent,
-    ProyectosComponent
+    ProyectosComponent,
+    ProjectListComponent
   ],
   imports: [
     BrowserModule,

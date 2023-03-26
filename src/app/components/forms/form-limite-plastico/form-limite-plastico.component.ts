@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ELEMENT_DATA } from './data'
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { EnsayoDeLimitePlasticoService } from '@app/services/ensayo-de-limite-plastico.service'
 import { ProjectService } from '@app/services/project.service'
 import { IGroup } from '@app/models/ensayoDelimitePlastico.model'
 import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
@@ -17,48 +16,37 @@ export class FormLimitePlasticoComponent {
     'primera',
     'segunda'
   ];
+  projectIdValue: string = ""
   dataSource = ELEMENT_DATA;
   form: FormGroup = new FormGroup({});
   activeEdit = true
-  valuesPlastico$ = this.plasticoService.valuesPlastico$
   values: IGroup | any = {};
   stringValues = ["primera", "segunda"]
+  initialValues={
+    TareNumber: [''],
+    TareWeight: ['',],
+    TarePlusWetSoilWeight: [''],
+    TarePlusDrySoil: [''],
+    WaterWeight: [''],
+    DrySoilWeight: [''],
+    Humidity: [''],
+  }
   constructor (
     private fb: FormBuilder,
-    private plasticoService: EnsayoDeLimitePlasticoService,
     private projectService: ProjectService
   ) {
     this.buildForm()
   }
   ngOnInit() {
-    this.valuesPlastico$.subscribe(v => {
-      if (v) {
-        this.values = v
-        this.form.patchValue(v)
-        this.activeEdit = false
-      }
-    })
+    this.projectIdValue = this.projectService.project.id
+    const project = this.projectService.project
+    this.form.patchValue(project.ensayoPlastico)
+    this.values = this.form.value
   }
   private buildForm() {
     this.form = this.fb.group({
-      primera: this.fb.group({
-        TareNumber: [''],
-        TareWeight: ['',],
-        TarePlusWetSoilWeight: [''],
-        TarePlusDrySoil: [''],
-        WaterWeight: [''],
-        DrySoilWeight: [''],
-        Humidity: [''],
-      }),
-      segunda: this.fb.group({
-        TareNumber: [''],
-        TareWeight: ['',],
-        TarePlusWetSoilWeight: [''],
-        TarePlusDrySoil: [''],
-        WaterWeight: [''],
-        DrySoilWeight: [''],
-        Humidity: [''],
-      }),
+      primera: this.fb.group(this.initialValues),
+      segunda: this.fb.group(this.initialValues),
       observation: ['']
     });
   }
@@ -81,8 +69,12 @@ export class FormLimitePlasticoComponent {
             this.values[stringValue].Humidity = valuesPesos.humedad
           }
         })
-        this.plasticoService.saveStorage(this.values)
-        this.projectService.createEnsayoPlastico(this.values,this.projectService.project.id)
+        this.projectService.createEnsayo(
+          {
+            ensayoPlastico: this.values,
+            ensayo: 'ensayoPlastico',
+            id: this.projectIdValue
+          })
         this.form.patchValue(this.values)
         this.activeEdit = false
       }

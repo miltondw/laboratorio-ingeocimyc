@@ -1,12 +1,12 @@
 <form [formGroup]="form" >
   <mat-form-field appearance="outline">
     <mat-label>Nombre del Proyecto</mat-label>
-    <input matInput formControlName="location">
+    <input matInput formControlName="title">
   </mat-form-field>
   <mat-error
   *ngIf="
-    form.get('location')?.hasError('required') &&
-    form.get('location')?.touched
+    form.get('title')?.hasError('required') &&
+    form.get('title')?.touched
   "
 >
   Este campo es requerido

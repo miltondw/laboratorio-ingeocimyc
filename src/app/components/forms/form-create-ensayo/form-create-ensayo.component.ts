@@ -1,12 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import { ProjectService } from '@app/services/project.service'
 import { Router } from '@angular/router'
+import {IProject} from '@app/models/project.model'
 
-export interface IProject {
-  location: string,
-  probe: number
-}
 
 @Component({
   selector: 'app-form-create-ensayo',
@@ -14,7 +11,7 @@ export interface IProject {
   styleUrls: ['./form-create-ensayo.component.scss']
 })
 
-export class FormCreateEnsayoComponent implements OnInit {
+export class FormCreateEnsayoComponent {
   form: FormGroup = new FormGroup({});
   values = {} as IProject;
 
@@ -27,21 +24,20 @@ export class FormCreateEnsayoComponent implements OnInit {
 
   private buildForm() {
     this.form = this.fb.group({
-      location: ['',Validators.required],
+      title: ['',Validators.required],
       probe: ['']
     });
-  }
-
-  ngOnInit() {
-
   }
 
   onSubmit() {
     if (this.form.valid) {
       this.values = this.form.value
       if (this.values) {
+        console.log(this.values,"create title")
         this.projectService.createProject(this.values)
-        this.router.navigate([`laboratorio/ensayo/${this.values.location.split(' ').join('-').toLocaleLowerCase()}`])
+        this.router.navigate(
+          [`laboratorio/ensayo/${this.values.title.split(' ').join('-').toLocaleLowerCase()}`]
+        )
       }
     } else {
       this.form.markAllAsTouched()

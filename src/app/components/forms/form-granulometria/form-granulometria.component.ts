@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ELEMENT_DATA } from './data'
 import { IGranulometria } from '@app/models/ensayoDeGranulometria.model'
-import { EnsayoDeGranulometriaService } from '@app/services/ensayo-de-granulometria.service'
 import { ProjectService } from '@app/services/project.service'
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -19,13 +18,12 @@ export class FormGranulometriaComponent {
   ];
   dataSource = ELEMENT_DATA;
   activeEdit = true
-  valuesGranulometria$ = this.granulometriaService.valuesGranulometria$
   values: IGranulometria | any = {}
   form: FormGroup = new FormGroup({});
+  projectIdValue: string = ""
 
   constructor (
     private fb: FormBuilder,
-    private granulometriaService: EnsayoDeGranulometriaService,
     private projectService: ProjectService
   ) {
     this.buildForm()
@@ -47,20 +45,21 @@ export class FormGranulometriaComponent {
     });
   }
   ngOnInit() {
-    this.valuesGranulometria$.subscribe(v => {
-      if (v) {
-        this.values = v
-        this.form.patchValue(v)
-        this.activeEdit = false
-      }
-    })
+    this.projectIdValue = this.projectService.project.id
+    const project = this.projectService.project
+    this.form.patchValue(project.ensayoGranulometria)
+    this.values = this.form.value
   }
   onSubmit() {
     if (this.form.valid) {
       this.values = this.form.value
       if (this.values) {
-        this.granulometriaService.saveStorage(this.values)
-        this.projectService.createEnsayoGranulometria(this.values,this.projectService.project.id)
+        this.projectService.createEnsayo(
+          {
+            ensayoGranulometria: this.values,
+            ensayo: 'ensayoGranulometria',
+            id: this.projectIdValue
+          })
         this.form.patchValue(this.values)
       }
       this.activeEdit = false

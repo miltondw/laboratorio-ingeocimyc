@@ -5,6 +5,7 @@
   <ul [class.active]="activeNav">
     <li *ngFor="let item of itemList" >
       <a
+      (click)="activeNav=!activeNav"
       routerLinkActive="active"
       [routerLink]="['laboratorio/',item.split(' ').join('-').toLocaleLowerCase()]"
       >

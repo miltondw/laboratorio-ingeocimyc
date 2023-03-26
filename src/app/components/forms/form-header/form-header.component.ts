@@ -14,12 +14,17 @@ export class FormHeaderComponent implements OnInit {
   projectIdValue:string|null=""
   date:Date=new Date()
   @Input() set projectId(id:string|null){
-    this.projectIdValue=id
     if(id) {
-      const project=this.projectService.getProject(id)
-      this.form.patchValue(project.header)
-      this.values=this.form.value
-      this.date=project.date
+      this.projectIdValue=id
+      const projectData=this.projectService.getProject(id)
+      this.date=projectData.project?.date
+      if(projectData.project?.header){
+        this.form.patchValue(projectData.project.header)
+      }else{
+        this.form.patchValue({})
+      }
+      if(this.form.value) this.values=this.form.value
+      console.log(projectData)
     }
   }
   constructor (
@@ -49,8 +54,7 @@ export class FormHeaderComponent implements OnInit {
     if (this.form.valid) {
       this.values=this.form.value
       if (this.values && this.projectIdValue) {
-        this.projectService.createHeader(this.values,this.projectIdValue)
-        console.log(this.values,"form")
+        this.projectService.createEnsayo({header:this.values,ensayo:'header',id:this.projectIdValue})
         this.activeEdit = false
       }
     } else {
