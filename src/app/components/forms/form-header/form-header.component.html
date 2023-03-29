@@ -27,7 +27,7 @@
         <input matInput formControlName="TareWeight" type="number" />
       </mat-form-field>
     </div>
-    <div class="content_field">
+    <div *ngIf="project.probe" class="content_field">
       <p *ngIf="values?.probe && !activeEdit" >
         Sondeo N°: <span>{{values?.probe}} </span>
     </p>
@@ -36,7 +36,7 @@
         <input matInput formControlName="probe" type="number" />
       </mat-form-field>
     </div>
-    <div class="content_field">
+    <div *ngIf="project.probe" class="content_field">
       <p *ngIf="values?.layer && !activeEdit" >
         Capa: <span>{{values?.layer}} </span>
     </p>

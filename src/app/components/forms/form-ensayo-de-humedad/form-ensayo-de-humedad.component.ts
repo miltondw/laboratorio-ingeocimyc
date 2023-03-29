@@ -4,6 +4,7 @@ import { ELEMENT_DATA } from './data'
 import { ProjectService } from '@app/services/project.service'
 import { IHumedad } from '@app/models/ensayoDeHumedad.model'
 import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
+import { IEnsayos } from '@app/models/Ensayos.model';
 
 @Component({
   selector: 'app-form-ensayo-de-humedad',
@@ -19,7 +20,8 @@ export class FormEnsayoDeHumedadComponent {
   form: FormGroup = new FormGroup({});
   activeEdit = true
   values: IHumedad | any = {};
-    projectIdValue: string = ""
+  projectIdValue: string = ""
+  project={ } as IEnsayos;
   constructor (
     private fb: FormBuilder,
     private projectService: ProjectService
@@ -28,8 +30,8 @@ export class FormEnsayoDeHumedadComponent {
   }
  ngOnInit() {
     this.projectIdValue = this.projectService.project.id
-    const project = this.projectService.project
-    this.form.patchValue(project.ensayoHumedad)
+    this.project = this.projectService.project
+    this.form.patchValue(this.project.ensayoHumedad)
     this.values = this.form.value
   }
   private buildForm() {

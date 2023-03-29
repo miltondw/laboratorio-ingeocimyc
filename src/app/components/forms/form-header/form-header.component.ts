@@ -1,4 +1,5 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { IEnsayos } from './../../../models/Ensayos.model';
+import { Component, OnInit,Input} from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { IHeader } from '@app/models/formHeader.model'
 import { ProjectService } from '@app/services/project.service'
@@ -7,24 +8,23 @@ import { ProjectService } from '@app/services/project.service'
   templateUrl: './form-header.component.html',
   styleUrls: ['./form-header.component.scss']
 })
-export class FormHeaderComponent implements OnInit {
+export class FormHeaderComponent implements OnInit{
   form: FormGroup = new FormGroup({});
   values: IHeader | null = null
   activeEdit = true
   projectIdValue:string|null=""
   date:Date=new Date()
+  project={ } as IEnsayos
   @Input() set projectId(id:string|null){
     if(id) {
       this.projectIdValue=id
       const projectData=this.projectService.getProject(id)
-      this.date=projectData.project?.date
-      if(projectData.project?.header){
+      this.project=projectData.project
+      this.date=this.project?.date
+      if(projectData.project?.header.location){
         this.form.patchValue(projectData.project.header)
-      }else{
-        this.form.patchValue({})
+        this.values=this.form.value
       }
-      if(this.form.value) this.values=this.form.value
-      console.log(projectData)
     }
   }
   constructor (
@@ -34,9 +34,6 @@ export class FormHeaderComponent implements OnInit {
     this.buildForm()
   }
   ngOnInit() {
-    if(this.projectIdValue && this.projectService.project?.header?.location){
-      this.form.patchValue(this.projectService.project.header)
-    }
     if (!this.values) {
       this.activeEdit = true
     }

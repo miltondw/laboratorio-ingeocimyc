@@ -30,7 +30,7 @@
         </label>
         <textarea formControlName="observation" name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
       </div>
-    <div class="cilindro">
+    <div class="cilindro" *ngIf="project.probe" >
       <img width="110" height="110" src="/assets/cilindro.svg" alt="cilindro">
       <div *ngIf="!activeEdit">
         <p>

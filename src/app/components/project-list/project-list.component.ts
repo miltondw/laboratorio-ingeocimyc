@@ -19,7 +19,7 @@ export interface IProjectsList {
 export class ProjectListComponent implements OnInit  {
   displayedColumns: string[] = ['titile', 'location', 'date', 'state'];
   projectsList: IProjectsList[]=[]
-  dataSource = new MatTableDataSource(this.projectsList);
+  dataSource = new MatTableDataSource(this.projectsList.reverse());
   values: IEnsayos[] | null = null
   constructor ( private ensayoService: LaboratorioService) {}
   ngOnInit() {
