@@ -13,66 +13,87 @@ import { LaboratorioService } from './laboratorio.service'
 })
 export class ProjectService {
   projects = [] as IEnsayos[]
-  project={ } as IEnsayos
+  project = {} as IEnsayos
+  projectId = ''
   constructor (private laboratorioService: LaboratorioService) {
-    this.projects=this.laboratorioService.currentProjects
-   }
+    this.projects = this.laboratorioService.currentProjects
+    this.laboratorioService.queryId$.subscribe(id => {
+      if (id) this.projectId = id
+    })
+  }
 
   createProject(project: IProject) {
     let projectInitial: IEnsayos = {
       id: '',
-      probe: 0,
-      title:'',
+      probe: project.probe,
+      title: project.title,
+      location: project.location,
       date: new Date(),
-      header: {} as IHeader,
-      ensayoHumedad: {} as IHumedad,
-      ensayoGranulometria: {} as IGranulometria,
-      ensayoLiquido: {} as ILiquido,
-      ensayoPlastico: {} as IPlastico
+      sondeos: []
     }
     projectInitial.id = project.title.split(' ').join('-').toLocaleLowerCase()
-    projectInitial.probe = project.probe
-    projectInitial.title = project.title
+    for (let sondeos = 1; sondeos <= projectInitial.probe; sondeos++) {
+      const sondeo = {
+        sondeo: sondeos,
+        header: {} as IHeader,
+        ensayoHumedad: {} as IHumedad,
+        ensayoGranulometria: {} as IGranulometria,
+        ensayoLiquido: {} as ILiquido,
+        ensayoPlastico: {} as IPlastico
+      }
+      projectInitial.sondeos.push(sondeo)
+    }
     this.laboratorioService.saveStorage(projectInitial)
   }
 
-  getProject(id: string) {
+  getProject(id:string|null) {
     const project: IEnsayos = this.projects.filter(project => project.id == id)[0]
     const index: number = this.projects.findIndex(project => project.id == id)
     return {
-      project, index
+      project,
+      index
     }
   }
 
   createEnsayo(Dto: IDto) {
-    const {project, index} = this.getProject(Dto.id)
-    if(Dto.ensayo){
+    const { project, index } = this.getProject(Dto.id)
+    if (Dto.location) project.location = Dto.location
+    //Fase 2
+    if (Dto.ensayo && Dto.sondeo) {
+      const iSondeo = Dto.sondeo - 1
       switch (Dto.ensayo) {
         case 'header':
-        if(Dto.header)
-        project['header'] = Dto.header;
+          if (Dto.header) {
+            project.sondeos[iSondeo]['header'] = Dto.header;
+          }
           break;
         case 'ensayoGranulometria':
-        if(Dto.ensayoGranulometria)
-        project['ensayoGranulometria'] = Dto.ensayoGranulometria;
+          if (Dto.ensayoGranulometria) {
+            project.sondeos[iSondeo]['ensayoGranulometria'] = Dto.ensayoGranulometria;
+          }
           break;
         case 'ensayoHumedad':
-        if(Dto.ensayoHumedad)
-        project['ensayoHumedad'] = Dto.ensayoHumedad;
+
+          if (Dto.ensayoHumedad) {
+            project.sondeos[iSondeo]['ensayoHumedad'] = Dto.ensayoHumedad;
+          }
           break;
         case 'ensayoLiquido':
-        if(Dto.ensayoLiquido)
-        project['ensayoLiquido'] = Dto.ensayoLiquido;
+          if (Dto.ensayoLiquido) {
+            project.sondeos[iSondeo]['ensayoLiquido'] = Dto.ensayoLiquido;
+          }
           break;
         case 'ensayoPlastico':
-        if(Dto.ensayoPlastico)
-        project['ensayoPlastico'] = Dto.ensayoPlastico;
+          if (Dto.ensayoPlastico) {
+            project.sondeos[iSondeo]['ensayoPlastico'] = Dto.ensayoPlastico;
+          }
           break;
         default:
           break;
       }
     }
-   this.project= this.projects[index]=project
-   this.laboratorioService.saveStorage(this.project,Dto.id,index)
+    this.project = this.projects[index] = project
+    this.laboratorioService.saveStorage(this.project, Dto.id, index)
   }
+
 }

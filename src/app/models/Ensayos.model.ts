@@ -8,6 +8,16 @@ export interface IEnsayos{
   title:string
   probe:number;
   date:Date;
+  sondeos:ISondeoData[]
+  location:string
+  // header:IHeader;
+  // ensayoHumedad:IHumedad;
+  // ensayoGranulometria:IGranulometria;
+  // ensayoLiquido:ILiquido;
+  // ensayoPlastico:IPlastico;
+}
+interface ISondeoData{
+  sondeo:number;
   header:IHeader;
   ensayoHumedad:IHumedad;
   ensayoGranulometria:IGranulometria;
@@ -16,7 +26,9 @@ export interface IEnsayos{
 }
 export interface IDto{
   id:string
-  ensayo:'header' | 'ensayoHumedad' | 'ensayoGranulometria' | 'ensayoLiquido' | 'ensayoPlastico',
+  ensayo:'header' | 'ensayoHumedad' | 'ensayoGranulometria' | 'ensayoLiquido' | 'ensayoPlastico';
+  sondeo?:number;
+  location?:string;
   header?:IHeader;
   ensayoHumedad?:IHumedad;
   ensayoGranulometria?:IGranulometria;

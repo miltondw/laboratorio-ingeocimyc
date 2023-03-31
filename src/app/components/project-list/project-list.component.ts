@@ -9,6 +9,7 @@ export interface IProjectsList {
   location: string;
   date: Date;
   state?: string;
+  sondeos:number[]
 }
 
 @Component({
@@ -17,7 +18,7 @@ export interface IProjectsList {
   styleUrls: ['./project-list.component.scss']
 })
 export class ProjectListComponent implements OnInit  {
-  displayedColumns: string[] = ['titile', 'location', 'date', 'state'];
+  displayedColumns: string[] = ['titile', 'location', 'date', 'state','sondeos'];
   projectsList: IProjectsList[]=[]
   dataSource = new MatTableDataSource(this.projectsList.reverse());
   values: IEnsayos[] | null = null
@@ -25,11 +26,16 @@ export class ProjectListComponent implements OnInit  {
   ngOnInit() {
     this.values= this.ensayoService.currentProjects
     this.values.map(project=>{
+      const sondeos=[]
+      for (let i = 1; i <= project.probe; i++) {
+        sondeos.push(i)
+      }
       const projectList:IProjectsList={
         id:project.id,
         date:project.date,
-        location:project.header.location,
+        location:project.location,
         titile:project.title,
+        sondeos,
         state:'pendiente'
       }
       this.projectsList.push(projectList)

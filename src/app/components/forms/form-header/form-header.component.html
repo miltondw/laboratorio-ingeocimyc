@@ -1,9 +1,9 @@
 <form [formGroup]="form" >
   <div class="content_field location">
-    <p *ngIf="values?.location && !activeEdit" >
-      Localización: <span>{{values?.location}} </span>
+    <p *ngIf="location && !activeEdit" >
+      Localización: <span>{{location}} </span>
     </p>
-    <mat-form-field *ngIf="!values?.location || activeEdit" appearance="outline">
+    <mat-form-field *ngIf="!location || activeEdit" appearance="outline">
       <mat-label>Localización</mat-label>
       <input matInput formControlName="location" />
     </mat-form-field>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ELEMENT_DATA } from './data'
 import { ProjectService } from '@app/services/project.service'
+import { LaboratorioService } from '@app/services/laboratorio.service';
 import { IHumedad } from '@app/models/ensayoDeHumedad.model'
-import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
 import { IEnsayos } from '@app/models/Ensayos.model';
+import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
 
 @Component({
   selector: 'app-form-ensayo-de-humedad',
@@ -20,18 +21,30 @@ export class FormEnsayoDeHumedadComponent {
   form: FormGroup = new FormGroup({});
   activeEdit = true
   values: IHumedad | any = {};
-  projectIdValue: string = ""
-  project={ } as IEnsayos;
+  projectIdValue: string | null = ""
+  project = {} as IEnsayos;
+  numberSondeo = 0
   constructor (
     private fb: FormBuilder,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private laboratorioService: LaboratorioService
   ) {
     this.buildForm()
   }
- ngOnInit() {
-    this.projectIdValue = this.projectService.project.id
-    this.project = this.projectService.project
-    this.form.patchValue(this.project.ensayoHumedad)
+  ngOnInit() {
+    this.projectIdValue = this.projectService.projectId
+    const project = this.projectService.getProject(this.projectIdValue).project
+    this.laboratorioService.queryProbe$.subscribe(probe => {
+      if (probe) {
+        this.numberSondeo = probe
+        const indexSondeo = probe - 1
+        if (Object.keys(project.sondeos[indexSondeo]?.ensayoHumedad).length !== 0) {
+          this.form.patchValue(project.sondeos[indexSondeo].ensayoHumedad)
+        } else {
+          this.form.reset()
+        }
+      }
+    })
     this.values = this.form.value
   }
   private buildForm() {
@@ -53,7 +66,7 @@ export class FormEnsayoDeHumedadComponent {
   onSubmit() {
     if (this.form.valid) {
       this.values = this.form.value
-      if (this.values) {
+      if (this.values && this.projectIdValue) {
         if (this.values?.TareWeightP1 &&
           this.values?.TarePlusDrySoilP3 &&
           this.values?.TarePlusWetSoilWeightP2
@@ -71,10 +84,11 @@ export class FormEnsayoDeHumedadComponent {
           {
             ensayoHumedad: this.values,
             ensayo: 'ensayoHumedad',
-            id: this.projectIdValue
+            id: this.projectIdValue,
+            sondeo: this.numberSondeo
           })
-        this.form.patchValue(this.values)
         this.activeEdit = false
+        this.form.patchValue(this.values)
       }
     } else {
       this.form.markAllAsTouched()

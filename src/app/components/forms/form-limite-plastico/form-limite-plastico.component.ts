@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '@app/services/project.service'
 import { IGroup } from '@app/models/ensayoDelimitePlastico.model'
 import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
+import { LaboratorioService } from '@app/services/laboratorio.service';
 
 @Component({
   selector: 'app-form-limite-plastico',
@@ -22,7 +23,8 @@ export class FormLimitePlasticoComponent {
   activeEdit = true
   values: IGroup | any = {};
   stringValues = ["primera", "segunda"]
-  initialValues={
+  numberSondeo = 0
+  initialValues = {
     TareNumber: [''],
     TareWeight: ['',],
     TarePlusWetSoilWeight: [''],
@@ -33,14 +35,25 @@ export class FormLimitePlasticoComponent {
   }
   constructor (
     private fb: FormBuilder,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private laboratorioService: LaboratorioService
   ) {
     this.buildForm()
   }
   ngOnInit() {
-    this.projectIdValue = this.projectService.project.id
-    const project = this.projectService.project
-    this.form.patchValue(project.ensayoPlastico)
+    this.projectIdValue = this.projectService.projectId
+    const project = this.projectService.getProject(this.projectIdValue).project
+    this.laboratorioService.queryProbe$.subscribe(probe => {
+      if (probe) {
+        this.numberSondeo = probe
+        const indexSondeo = probe - 1
+        if (Object.keys(project.sondeos[indexSondeo]?.ensayoPlastico).length !== 0) {
+          this.form.patchValue(project.sondeos[indexSondeo].ensayoPlastico)
+        } else {
+          this.form.reset()
+        }
+      }
+    })
     this.values = this.form.value
   }
   private buildForm() {
@@ -73,7 +86,8 @@ export class FormLimitePlasticoComponent {
           {
             ensayoPlastico: this.values,
             ensayo: 'ensayoPlastico',
-            id: this.projectIdValue
+            id: this.projectIdValue,
+            sondeo: this.numberSondeo
           })
         this.form.patchValue(this.values)
         this.activeEdit = false

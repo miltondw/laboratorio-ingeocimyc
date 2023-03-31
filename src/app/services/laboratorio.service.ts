@@ -5,11 +5,17 @@ import {IEnsayos} from '@app/models/Ensayos.model'
 @Injectable({
   providedIn: 'root'
 })
+
 export class LaboratorioService {
   private projectsSource = new BehaviorSubject<IEnsayos[]>([]);
+  private queryProbe = new BehaviorSubject<number|null>(null);
+  private queryId = new BehaviorSubject<string|null>('');
+
   key = "projects-laboratorio"
   currentProjects=[] as IEnsayos[]
   projectList$ = this.projectsSource.asObservable()
+  queryProbe$ = this.queryProbe.asObservable()
+  queryId$ = this.queryId.asObservable()
 
   constructor () {
     const projectsList = localStorage.getItem(this.key);
@@ -25,6 +31,14 @@ export class LaboratorioService {
       this.currentProjects[index]=project
     }
     localStorage.setItem(this.key, JSON.stringify(this.currentProjects));
+  }
+
+  setQueryProbe(probe: number) {
+    this.queryProbe.next(probe);
+  }
+
+  setQueryId(id: string|null) {
+    if(id) this.queryId.next(id);
   }
 
 }

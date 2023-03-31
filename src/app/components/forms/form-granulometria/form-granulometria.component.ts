@@ -1,3 +1,4 @@
+import { LaboratorioService } from './../../../services/laboratorio.service';
 import { Component } from '@angular/core';
 import { ELEMENT_DATA } from './data'
 import { IGranulometria } from '@app/models/ensayoDeGranulometria.model'
@@ -21,10 +22,11 @@ export class FormGranulometriaComponent {
   values: IGranulometria | any = {}
   form: FormGroup = new FormGroup({});
   projectIdValue: string = ""
-
+  numberSondeo = 1
   constructor (
     private fb: FormBuilder,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private laboratorioService: LaboratorioService,
   ) {
     this.buildForm()
   }
@@ -45,9 +47,19 @@ export class FormGranulometriaComponent {
     });
   }
   ngOnInit() {
-    this.projectIdValue = this.projectService.project.id
-    const project = this.projectService.project
-    this.form.patchValue(project.ensayoGranulometria)
+    this.projectIdValue = this.projectService.projectId
+    const project = this.projectService.getProject(this.projectIdValue).project
+    this.laboratorioService.queryProbe$.subscribe(probe => {
+      if (probe) {
+        this.numberSondeo = probe
+        const indexSondeo = probe - 1
+        if (Object.keys(project.sondeos[indexSondeo]?.ensayoGranulometria).length !== 0) {
+          this.form.patchValue(project.sondeos[indexSondeo].ensayoGranulometria)
+        } else {
+          this.form.reset()
+        }
+      }
+    })
     this.values = this.form.value
   }
   onSubmit() {
@@ -58,7 +70,8 @@ export class FormGranulometriaComponent {
           {
             ensayoGranulometria: this.values,
             ensayo: 'ensayoGranulometria',
-            id: this.projectIdValue
+            id: this.projectIdValue,
+            sondeo: this.numberSondeo
           })
         this.form.patchValue(this.values)
       }

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup,Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService } from '@app/services/project.service'
 import { Router } from '@angular/router'
-import {IProject} from '@app/models/project.model'
+import { IProject } from '@app/models/project.model'
 
 
 @Component({
@@ -20,11 +20,12 @@ export class FormCreateEnsayoComponent {
     private projectService: ProjectService,
     private router: Router,
 
-  ) { this.buildForm()}
+  ) { this.buildForm() }
 
   private buildForm() {
     this.form = this.fb.group({
-      title: ['',Validators.required],
+      title: ['', Validators.required],
+      location: ['', Validators.required],
       probe: ['']
     });
   }
@@ -33,15 +34,16 @@ export class FormCreateEnsayoComponent {
     if (this.form.valid) {
       this.values = this.form.value
       if (this.values) {
-        console.log(this.values,"create title")
         this.projectService.createProject(this.values)
-        this.router.navigate(
-          [`laboratorio/ensayo/${this.values.title.split(' ').join('-').toLocaleLowerCase()}`]
-        )
+        const id = this.values.title.split(' ').join('-').toLocaleLowerCase()
+        if (this.values.probe) {
+          this.router.navigate([`laboratorio/ensayo/${id}`], { queryParams: { probe: '1' } });
+        } else {
+          this.router.navigate([`laboratorio/ensayo/${id}`])
+        }
       }
     } else {
       this.form.markAllAsTouched()
     }
   }
-
 }

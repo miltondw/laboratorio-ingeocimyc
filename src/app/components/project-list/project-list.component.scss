@@ -1,0 +1,12 @@
+ul {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill,minmax(20px,1fr));
+  li{
+    a{
+      font-size: 18px;
+    }
+  }
+}
