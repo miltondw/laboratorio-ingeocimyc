@@ -1,5 +1,5 @@
 export interface IHumedad{
-  DepthM:number;
+  DepthM:string;
   TareWeightP1:number;
   TarePlusWetSoilWeightP2:number;
   TarePlusDrySoilP3:number;

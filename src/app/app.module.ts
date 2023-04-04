@@ -14,7 +14,8 @@ import { NgModule } from '@angular/core';
   import { MatSliderModule } from '@angular/material/slider';
   import { MatRadioModule } from '@angular/material/radio';
   import {MatTableModule} from '@angular/material/table';
-
+  import {MatExpansionModule} from '@angular/material/expansion';
+  import {MatIconModule} from '@angular/material/icon';
 //Pages
   import { EnsayosComponent } from './pages/ensayos/ensayos.component';
   import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.component';
@@ -64,6 +65,8 @@ import { ProjectListComponent } from './components/project-list/project-list.com
     MatSliderModule,
     MatRadioModule,
     MatTableModule,
+    MatIconModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

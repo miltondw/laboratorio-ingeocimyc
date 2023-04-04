@@ -4,6 +4,7 @@ import { IHeader } from '@app/models/formHeader.model'
 import { IEnsayos } from '@app/models/Ensayos.model';
 import { ProjectService } from '@app/services/project.service'
 import { LaboratorioService } from '@app/services/laboratorio.service'
+
 @Component({
   selector: 'app-form-header',
   templateUrl: './form-header.component.html',
@@ -32,41 +33,56 @@ export class FormHeaderComponent implements OnInit {
     this.laboratorioService.queryId$.subscribe(id => {
       this.projectIdValue = id
       this.project = this.projectService.getProject(id).project
-      if (this.form.value?.probe) this.updateData(this.project, this.form.value.probe)
-    })
-
-    this.laboratorioService.queryProbe$.subscribe(probe => {
-      if (probe) {
-        this.updateData(this.project, probe)
-        this.numberSondeo = probe - 1
+      if (this.form.value?.probe) {
+        this.updateData(this.project, this.form.value.probe, this.form.value.layer)
       }
     })
+    this.laboratorioService.queryProbe$.subscribe(probe => {
+      if (probe) {
+        this.updateData(this.project, probe, this.form.value.layer)
+      }
+    })
+    this.laboratorioService.queryLayer$.subscribe(layer => {
+      this.form.patchValue({ layer })
+      if (layer && this.projectIdValue) {
+        this.updateData(this.project, this.numberSondeo, layer)
+      }
+    })
+
   }
 
   private buildForm() {
     this.form = this.fb.group({
       location: ['', [Validators.required]],
       TareWeight: [''],
-      probe: [1],
-      layer: [''],
+      probe: [],
+      layer: [],
       sampleWeightH: ['']
     });
   }
+  save() {
+    let formValue = this.form.value
+    delete formValue.location;
+    delete formValue.probe;
+    this.values = formValue
+    this.location = this.form.get('location')?.value
+    if (this.values && this.projectIdValue) {
+      this.projectService.createEnsayo(
+        {
+          header: this.values,
+          ensayo: 'header',
+          id: this.projectIdValue,
+          location: this.location,
+          sondeo: this.numberSondeo,
+          layer: this.values.layer
+        })
+      this.activeEdit = false
+    }
+
+  }
   onSubmit() {
     if (this.form.valid) {
-      this.values = this.form.value
-      this.location = this.form.get('location')?.value
-      if (this.values && this.projectIdValue) {
-        this.projectService.createEnsayo(
-          {
-            header: this.values,
-            ensayo: 'header',
-            id: this.projectIdValue,
-            location: this.location,
-            sondeo: this.values.probe
-          })
-        this.activeEdit = false
-      }
+      this.save()
     } else {
       this.form.markAllAsTouched()
     }
@@ -74,25 +90,26 @@ export class FormHeaderComponent implements OnInit {
   onActiveEdit() {
     this.activeEdit = true
   }
-  updateData(projectData: IEnsayos, valueProbe: number) {
+  updateData(projectData: IEnsayos, valueProbe: number, valueLayer: number) {
     if (valueProbe) {
       const indexSondeo = valueProbe - 1
-      if (Object.keys(projectData.sondeos[indexSondeo]?.header).length !== 0) {
-        this.form.patchValue(projectData.sondeos[indexSondeo].header)
+      const indexLayer = valueLayer - 1
+      this.location = projectData.location
+      this.numberSondeo = valueProbe
+      this.form.patchValue({ layer: valueLayer,location: projectData.location, probe: valueProbe })
+      const header = projectData.sondeos[indexSondeo].muestras[indexLayer]?.header
+      if(header?.layer){
+        header.layer = valueLayer
+      }
+      if (header?.TareWeight) {
+        this.form.patchValue({ TareWeight: header.TareWeight })
       } else {
-        this.form.patchValue({
-          TareWeight: '',
-          layer: '',
-          sampleWeightH: '',
-        })
+        this.form.patchValue({ TareWeight: '' })
       }
-      if (projectData?.location) {
-        this.form.patchValue({ location: projectData.location })
-        this.location = projectData.location
-      }
-      if (this.values?.probe) {
-        this.form.patchValue({ probe: valueProbe })
-        this.values.probe = valueProbe;
+      if (header?.sampleWeightH) {
+        this.form.patchValue({ sampleWeightH: header.sampleWeightH })
+      } else {
+        this.form.patchValue({ sampleWeightH: '' })
       }
       this.date = projectData?.date
       this.values = this.form.value

@@ -37,7 +37,7 @@ export class FormCreateEnsayoComponent {
         this.projectService.createProject(this.values)
         const id = this.values.title.split(' ').join('-').toLocaleLowerCase()
         if (this.values.probe) {
-          this.router.navigate([`laboratorio/ensayo/${id}`], { queryParams: { probe: '1' } });
+          this.router.navigate([`laboratorio/ensayo/${id}`], { queryParams: { probe: '1', layer:'1' } });
         } else {
           this.router.navigate([`laboratorio/ensayo/${id}`])
         }

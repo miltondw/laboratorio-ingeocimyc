@@ -24,6 +24,7 @@ export class FormLimiteLiquidoComponent {
   stringValues = ["primera", "segunda", "tercera"]
   projectIdValue: string = ""
   numberSondeo = 0
+  indexLayer = 0
 
   initialValues = {
     NumberOfStrokes: [''],
@@ -50,11 +51,16 @@ export class FormLimiteLiquidoComponent {
       if (probe) {
         this.numberSondeo = probe
         const indexSondeo = probe - 1
-        if (Object.keys(project.sondeos[indexSondeo]?.ensayoLiquido).length !== 0) {
-          this.form.patchValue(project.sondeos[indexSondeo].ensayoLiquido)
+        if (Object.keys(project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoLiquido).length !== 0) {
+          this.form.patchValue(project.sondeos[indexSondeo].muestras[this.indexLayer].ensayoLiquido)
         } else {
           this.form.reset()
         }
+      }
+    })
+    this.laboratorioService.queryLayer$.subscribe(layer => {
+      if (layer) {
+        this.indexLayer = layer - 1
       }
     })
     this.values = this.form.value

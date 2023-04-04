@@ -24,6 +24,7 @@ export class FormEnsayoDeHumedadComponent {
   projectIdValue: string | null = ""
   project = {} as IEnsayos;
   numberSondeo = 0
+  indexLayer = 0
   constructor (
     private fb: FormBuilder,
     private projectService: ProjectService,
@@ -33,18 +34,24 @@ export class FormEnsayoDeHumedadComponent {
   }
   ngOnInit() {
     this.projectIdValue = this.projectService.projectId
-    const project = this.projectService.getProject(this.projectIdValue).project
+    this.project = this.projectService.getProject(this.projectIdValue).project
     this.laboratorioService.queryProbe$.subscribe(probe => {
       if (probe) {
         this.numberSondeo = probe
         const indexSondeo = probe - 1
-        if (Object.keys(project.sondeos[indexSondeo]?.ensayoHumedad).length !== 0) {
-          this.form.patchValue(project.sondeos[indexSondeo].ensayoHumedad)
+        if (Object.keys(this.project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoHumedad).length !== 0) {
+          this.form.patchValue(this.project.sondeos[indexSondeo].muestras[this.indexLayer].ensayoHumedad)
         } else {
           this.form.reset()
         }
       }
     })
+    this.laboratorioService.queryLayer$.subscribe(layer => {
+      if (layer) {
+        this.indexLayer = layer - 1
+      }
+    })
+
     this.values = this.form.value
   }
   private buildForm() {

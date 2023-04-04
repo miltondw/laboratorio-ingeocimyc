@@ -24,6 +24,7 @@ export class FormLimitePlasticoComponent {
   values: IGroup | any = {};
   stringValues = ["primera", "segunda"]
   numberSondeo = 0
+  indexLayer = 0
   initialValues = {
     TareNumber: [''],
     TareWeight: ['',],
@@ -47,11 +48,17 @@ export class FormLimitePlasticoComponent {
       if (probe) {
         this.numberSondeo = probe
         const indexSondeo = probe - 1
-        if (Object.keys(project.sondeos[indexSondeo]?.ensayoPlastico).length !== 0) {
-          this.form.patchValue(project.sondeos[indexSondeo].ensayoPlastico)
+        const ensayo=project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoPlastico
+        if (Object.keys(ensayo).length !== 0) {
+          this.form.patchValue(ensayo)
         } else {
           this.form.reset()
         }
+      }
+    })
+    this.laboratorioService.queryLayer$.subscribe(layer => {
+      if (layer) {
+        this.indexLayer = layer - 1
       }
     })
     this.values = this.form.value

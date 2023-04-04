@@ -10,14 +10,12 @@ export interface IEnsayos{
   date:Date;
   sondeos:ISondeoData[]
   location:string
-  // header:IHeader;
-  // ensayoHumedad:IHumedad;
-  // ensayoGranulometria:IGranulometria;
-  // ensayoLiquido:ILiquido;
-  // ensayoPlastico:IPlastico;
 }
 interface ISondeoData{
   sondeo:number;
+  muestras:IMuestras[]
+}
+interface IMuestras{
   header:IHeader;
   ensayoHumedad:IHumedad;
   ensayoGranulometria:IGranulometria;
@@ -28,6 +26,7 @@ export interface IDto{
   id:string
   ensayo:'header' | 'ensayoHumedad' | 'ensayoGranulometria' | 'ensayoLiquido' | 'ensayoPlastico';
   sondeo?:number;
+  layer?:number;
   location?:string;
   header?:IHeader;
   ensayoHumedad?:IHumedad;

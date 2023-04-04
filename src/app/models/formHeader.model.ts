@@ -1,6 +1,5 @@
 export interface IHeader{
 TareWeight:number;
-probe:number;
-layer:string;
+layer:number;
 sampleWeightH:number;
 }

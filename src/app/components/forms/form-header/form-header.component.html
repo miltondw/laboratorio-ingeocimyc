@@ -28,21 +28,21 @@
       </mat-form-field>
     </div>
     <div *ngIf="project.probe" class="content_field">
-      <p *ngIf="values?.probe && !activeEdit" >
-        Sondeo N°: <span>{{values?.probe}} </span>
+      <p *ngIf="numberSondeo && !activeEdit" >
+        Sondeo N°: <span>{{numberSondeo}} </span>
     </p>
-      <mat-form-field appearance="outline" *ngIf="!values?.probe || activeEdit" >
+      <mat-form-field appearance="outline" *ngIf="!numberSondeo || activeEdit" >
         <mat-label>Sondeo N°</mat-label>
         <input matInput formControlName="probe" type="number" />
       </mat-form-field>
     </div>
     <div *ngIf="project.probe" class="content_field">
       <p *ngIf="values?.layer && !activeEdit" >
-        Capa: <span>{{values?.layer}} </span>
+        Muestra: <span>{{values?.layer}} </span>
     </p>
       <mat-form-field appearance="outline" *ngIf="!values?.layer || activeEdit" >
-        <mat-label>Capa</mat-label>
-        <input matInput formControlName="layer" />
+        <mat-label>Muestra</mat-label>
+        <input matInput type="number" formControlName="layer" />
       </mat-form-field>
     </div>
     <div class="content_field">

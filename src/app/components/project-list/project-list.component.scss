@@ -1,12 +1,32 @@
 ul {
   list-style: none;
-  display: grid;
-  gap: 1rem;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fill,minmax(20px,1fr));
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 2px solid #b1b1b1;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  padding-top: 7px;
   li{
     a{
       font-size: 18px;
+      display: inline-block;
+      padding: 5px !important;
+      margin: 9px 10px;
+      border-radius: 5px;
+      &:hover{
+        background: #008381d4;
+        color: #fff;
+        text-decoration: none;
+      }
     }
+  }
+}
+.content-sondeos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 1rem;
+  a {
+    padding: 1.5rem !important;
   }
 }

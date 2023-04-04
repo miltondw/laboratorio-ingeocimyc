@@ -23,6 +23,8 @@ export class FormGranulometriaComponent {
   form: FormGroup = new FormGroup({});
   projectIdValue: string = ""
   numberSondeo = 1
+  indexLayer = 0
+
   constructor (
     private fb: FormBuilder,
     private projectService: ProjectService,
@@ -53,11 +55,16 @@ export class FormGranulometriaComponent {
       if (probe) {
         this.numberSondeo = probe
         const indexSondeo = probe - 1
-        if (Object.keys(project.sondeos[indexSondeo]?.ensayoGranulometria).length !== 0) {
-          this.form.patchValue(project.sondeos[indexSondeo].ensayoGranulometria)
+        if (Object.keys(project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoGranulometria).length !== 0) {
+          this.form.patchValue(project.sondeos[indexSondeo].muestras[this.indexLayer].ensayoGranulometria)
         } else {
           this.form.reset()
         }
+      }
+    })
+    this.laboratorioService.queryLayer$.subscribe(layer => {
+      if (layer) {
+        this.indexLayer = layer - 1
       }
     })
     this.values = this.form.value

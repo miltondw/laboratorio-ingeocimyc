@@ -13,7 +13,7 @@
         </p>
       <mat-form-field appearance="outline" *ngIf="activeEdit" >
         <mat-label>{{element.prueba}}</mat-label>
-        <input matInput [formControlName]="element.primera">
+        <input matInput [type]="element.primera!=='DepthM'?'number':'text'" [formControlName]="element.primera">
       </mat-form-field>
       </td>
     </ng-container>
