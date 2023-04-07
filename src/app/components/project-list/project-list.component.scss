@@ -24,9 +24,35 @@ ul {
 }
 .content-sondeos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 1rem;
   a {
     padding: 1.5rem !important;
   }
+}
+.btns-delete{
+  button{
+    margin:0 5px;
+  }
+}
+.header{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+}
+.mat-mini-fab {
+  width: 24px;
+  height: 24px;
+  padding-top: 7px;
+}
+.mat-icon-sm{
+  font-size: 16px;
+}
+.sondeo{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 5px 5px !important;
 }

@@ -31,6 +31,18 @@ export class ProjectService {
     })
   }
 
+  //Get
+  getProject(id: string | null) {
+    const project: IEnsayos = this.projects.filter(project => project.id == id)[0]
+    const index: number = this.projects.findIndex(project => project.id == id)
+    this.project = project
+    this.indexProject = index
+    return {
+      project,
+      index
+    }
+  }
+  //Create
   createProject(project: IProject) {
     let projectInitial: IEnsayos = {
       id: '',
@@ -45,23 +57,19 @@ export class ProjectService {
       const sondeo = {
         sondeo: sondeos,
         muestras: [
-          this.muestra
+          {
+            header: {} as IHeader,
+            ensayoHumedad: {} as IHumedad,
+            ensayoGranulometria: {} as IGranulometria,
+            ensayoLiquido: {} as ILiquido,
+            ensayoPlastico: {} as IPlastico
+          }
         ]
       }
       projectInitial.sondeos.push(sondeo)
     }
-    projectInitial.sondeos[0].muestras[0].header.layer=1
+    projectInitial.sondeos[0].muestras[0].header.layer = 1
     this.laboratorioService.saveStorage(projectInitial)
-  }
-  getProject(id: string | null) {
-    const project: IEnsayos = this.projects.filter(project => project.id == id)[0]
-    const index: number = this.projects.findIndex(project => project.id == id)
-    this.project = project
-    this.indexProject = index
-    return {
-      project,
-      index
-    }
   }
   createEnsayo(Dto: IDto) {
     const { project, index } = this.getProject(Dto.id)
@@ -106,14 +114,42 @@ export class ProjectService {
     this.project = this.projects[index]
     this.laboratorioService.saveStorage(this.project, Dto.id, index)
   }
-  createSondeo(){
-    console.log(this.project.probe)
-    this.project.sondeos.push({sondeo:this.project.probe,muestras:[this.muestra]})
+  createSondeo() {
+    this.project.sondeos.push(
+      {
+        sondeo: this.project.probe,
+        muestras: [this.muestra]
+      }
+    )
     this.laboratorioService.saveStorage(this.project, this.projectId, this.indexProject)
   }
   createMuestra(sondeo: number) {
     let muestras = this.project.sondeos[sondeo].muestras
-    muestras.push(this.muestra)
+    muestras.push({
+      header: {} as IHeader,
+      ensayoHumedad: {} as IHumedad,
+      ensayoGranulometria: {} as IGranulometria,
+      ensayoLiquido: {} as ILiquido,
+      ensayoPlastico: {} as IPlastico,
+    })
     this.laboratorioService.saveStorage(this.project, this.projectId, this.indexProject)
+  }
+  //Delete
+  deleteEnsayo(id: string) {
+    this.projects = this.projects.filter((project) => project.id !== id)
+    this.laboratorioService.deleteEnsayo(this.projects)
+  }
+  deleteSondeo(id: string, indexSondeo: number) {
+    const { project, index } = this.getProject(id)
+    project.sondeos.splice(indexSondeo,1)
+    project.probe=project.probe-1
+    this.project = project
+    this.laboratorioService.saveStorage(this.project, this.project.id, index)
+  }
+  deleteMuestra(id: string, indexSondeo: number, indexMuestra: number) {
+    const { project, index } = this.getProject(id)
+    project.sondeos[indexSondeo].muestras.splice(indexMuestra, 1)
+    this.project = project
+    this.laboratorioService.saveStorage(this.project, this.project.id, index)
   }
 }

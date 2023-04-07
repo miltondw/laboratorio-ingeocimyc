@@ -2,6 +2,7 @@ import { LaboratorioService } from './../../../services/laboratorio.service';
 import { Component } from '@angular/core';
 import { ELEMENT_DATA } from './data'
 import { IGranulometria } from '@app/models/ensayoDeGranulometria.model'
+import { IEnsayos } from '@app/models/Ensayos.model';
 import { ProjectService } from '@app/services/project.service'
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -20,10 +21,11 @@ export class FormGranulometriaComponent {
   dataSource = ELEMENT_DATA;
   activeEdit = true
   values: IGranulometria | any = {}
+  project = {} as IEnsayos
   form: FormGroup = new FormGroup({});
   projectIdValue: string = ""
   numberSondeo = 1
-  indexLayer = 0
+  capa = 1
 
   constructor (
     private fb: FormBuilder,
@@ -48,27 +50,25 @@ export class FormGranulometriaComponent {
       observation: ['']
     });
   }
+
   ngOnInit() {
     this.projectIdValue = this.projectService.projectId
-    const project = this.projectService.getProject(this.projectIdValue).project
+    this.project = this.projectService.getProject(this.projectIdValue).project
+    this.form.reset()
+    this.values = {}
     this.laboratorioService.queryProbe$.subscribe(probe => {
       if (probe) {
         this.numberSondeo = probe
-        const indexSondeo = probe - 1
-        if (Object.keys(project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoGranulometria).length !== 0) {
-          this.form.patchValue(project.sondeos[indexSondeo].muestras[this.indexLayer].ensayoGranulometria)
-        } else {
-          this.form.reset()
-        }
       }
     })
     this.laboratorioService.queryLayer$.subscribe(layer => {
       if (layer) {
-        this.indexLayer = layer - 1
+        this.capa = layer
+        this.update(this.numberSondeo, layer)
       }
     })
-    this.values = this.form.value
   }
+
   onSubmit() {
     if (this.form.valid) {
       this.values = this.form.value
@@ -78,7 +78,8 @@ export class FormGranulometriaComponent {
             ensayoGranulometria: this.values,
             ensayo: 'ensayoGranulometria',
             id: this.projectIdValue,
-            sondeo: this.numberSondeo
+            sondeo: this.numberSondeo,
+            layer: this.capa
           })
         this.form.patchValue(this.values)
       }
@@ -87,7 +88,20 @@ export class FormGranulometriaComponent {
       this.form.markAllAsTouched()
     }
   }
+
   onActiveEdit() {
     this.activeEdit = true
+  }
+
+  update(ISondeo: number, ICapa: number) {
+    const granulometria = this.project.sondeos[ISondeo - 1].muestras[ICapa - 1]?.ensayoGranulometria
+    if (Object.keys(granulometria).length === 0) {
+      this.form.reset()
+      this.activeEdit = true
+    } else {
+      this.form.patchValue(granulometria)
+      this.activeEdit = false
+    }
+    this.values = this.form.value
   }
 }

@@ -30,13 +30,24 @@ export class LaboratorioService {
   saveStorage(project: IEnsayos, id?: string, index?: number) {
     if (!id) this.currentProjects.push(project)
     if (id && index) this.currentProjects[index] = project
+    this.projectsSource.next(this.currentProjects)
     localStorage.setItem(this.key, JSON.stringify(this.currentProjects));
   }
   saveLayer(layer: number, sondeo: number, id: string, index: number) {
     this.currentProjects[index].sondeos[sondeo].muestras[layer - 1].header.layer = layer
+    this.projectsSource.next(this.currentProjects)
     localStorage.setItem(this.key, JSON.stringify(this.currentProjects));
   }
+  deleteStorage() {
+    localStorage.removeItem(this.key)
+    this.projectsSource.next([])
 
+  }
+  deleteEnsayo(projects: IEnsayos[]) {
+    this.currentProjects = projects
+    this.projectsSource.next(projects)
+    localStorage.setItem(this.key, JSON.stringify(this.currentProjects));
+  }
   setQueryProbe(probe: number) {
     this.queryProbe.next(probe);
   }

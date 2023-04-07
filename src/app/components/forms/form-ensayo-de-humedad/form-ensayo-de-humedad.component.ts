@@ -35,20 +35,17 @@ export class FormEnsayoDeHumedadComponent {
   ngOnInit() {
     this.projectIdValue = this.projectService.projectId
     this.project = this.projectService.getProject(this.projectIdValue).project
+    this.form.reset()
+    this.values = {}
     this.laboratorioService.queryProbe$.subscribe(probe => {
       if (probe) {
         this.numberSondeo = probe
-        const indexSondeo = probe - 1
-        if (Object.keys(this.project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoHumedad).length !== 0) {
-          this.form.patchValue(this.project.sondeos[indexSondeo].muestras[this.indexLayer].ensayoHumedad)
-        } else {
-          this.form.reset()
-        }
       }
     })
     this.laboratorioService.queryLayer$.subscribe(layer => {
       if (layer) {
-        this.indexLayer = layer - 1
+        this.indexLayer = layer
+        this.update(this.numberSondeo, layer)
       }
     })
 
@@ -92,7 +89,8 @@ export class FormEnsayoDeHumedadComponent {
             ensayoHumedad: this.values,
             ensayo: 'ensayoHumedad',
             id: this.projectIdValue,
-            sondeo: this.numberSondeo
+            sondeo: this.numberSondeo,
+            layer: this.indexLayer
           })
         this.activeEdit = false
         this.form.patchValue(this.values)
@@ -103,5 +101,16 @@ export class FormEnsayoDeHumedadComponent {
   }
   onActiveEdit() {
     this.activeEdit = true
+  }
+  update(ISondeo: number, ICapa: number) {
+    const ensayoHumedad = this.project.sondeos[ISondeo - 1].muestras[ICapa - 1]?.ensayoHumedad
+    if (Object.keys(ensayoHumedad).length === 0) {
+      this.form.reset()
+      this.activeEdit = true
+    } else {
+      this.form.patchValue(ensayoHumedad)
+      this.activeEdit = false
+    }
+    this.values = this.form.value
   }
 }

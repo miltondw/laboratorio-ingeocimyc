@@ -3,6 +3,7 @@ import { ELEMENT_DATA } from './data'
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProjectService } from '@app/services/project.service'
 import { IGroup } from '@app/models/ensayoDelimitePlastico.model'
+import { IEnsayos } from '@app/models/Ensayos.model';
 import { waterSoilHumidity } from '@app/utils/water-soil-humidity'
 import { LaboratorioService } from '@app/services/laboratorio.service';
 
@@ -22,9 +23,11 @@ export class FormLimitePlasticoComponent {
   form: FormGroup = new FormGroup({});
   activeEdit = true
   values: IGroup | any = {};
+  ensayo = {} as IGroup;
   stringValues = ["primera", "segunda"]
   numberSondeo = 0
   indexLayer = 0
+  project = {} as IEnsayos
   initialValues = {
     TareNumber: [''],
     TareWeight: ['',],
@@ -43,22 +46,16 @@ export class FormLimitePlasticoComponent {
   }
   ngOnInit() {
     this.projectIdValue = this.projectService.projectId
-    const project = this.projectService.getProject(this.projectIdValue).project
+    this.project = this.projectService.getProject(this.projectIdValue).project
+    this.form.reset()
+    this.values = {}
     this.laboratorioService.queryProbe$.subscribe(probe => {
-      if (probe) {
-        this.numberSondeo = probe
-        const indexSondeo = probe - 1
-        const ensayo=project.sondeos[indexSondeo].muestras[this.indexLayer]?.ensayoPlastico
-        if (Object.keys(ensayo).length !== 0) {
-          this.form.patchValue(ensayo)
-        } else {
-          this.form.reset()
-        }
-      }
+      if (probe) this.numberSondeo = probe
     })
     this.laboratorioService.queryLayer$.subscribe(layer => {
       if (layer) {
-        this.indexLayer = layer - 1
+        this.indexLayer = layer
+        this.update(this.numberSondeo, layer)
       }
     })
     this.values = this.form.value
@@ -94,7 +91,8 @@ export class FormLimitePlasticoComponent {
             ensayoPlastico: this.values,
             ensayo: 'ensayoPlastico',
             id: this.projectIdValue,
-            sondeo: this.numberSondeo
+            sondeo: this.numberSondeo,
+            layer: this.indexLayer
           })
         this.form.patchValue(this.values)
         this.activeEdit = false
@@ -105,5 +103,16 @@ export class FormLimitePlasticoComponent {
   }
   onActiveEdit() {
     this.activeEdit = true
+  }
+  update(ISondeo: number, ICapa: number) {
+    const ensayoPlastico = this.project.sondeos[ISondeo - 1].muestras[ICapa - 1]?.ensayoPlastico
+    if (Object.keys(ensayoPlastico).length === 0) {
+      this.form.reset()
+      this.activeEdit = true
+    } else {
+      this.form.patchValue(ensayoPlastico)
+      this.activeEdit = false
+    }
+    this.values = this.form.value
   }
 }

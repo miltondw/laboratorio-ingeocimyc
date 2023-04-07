@@ -111,6 +111,11 @@ export class FormHeaderComponent implements OnInit {
       } else {
         this.form.patchValue({ sampleWeightH: '' })
       }
+      if(header?.TareWeight && header?.sampleWeightH){
+          this.activeEdit = false
+      }else{
+        this.activeEdit = true
+      }
       this.date = projectData?.date
       this.values = this.form.value
     }
