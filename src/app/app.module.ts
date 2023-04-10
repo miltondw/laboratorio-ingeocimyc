@@ -33,7 +33,8 @@ import { NgModule } from '@angular/core';
   import { LayoutComponent } from './components/layout/layout.component';
   import { NavbarComponent } from './components/navbar/navbar.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
-
+import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +51,8 @@ import { ProjectListComponent } from './components/project-list/project-list.com
     LayoutComponent,
     NavbarComponent,
     ProyectosComponent,
-    ProjectListComponent
+    ProjectListComponent,
+    PdfExampleComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,8 @@ import { ProjectListComponent } from './components/project-list/project-list.com
     MatRadioModule,
     MatTableModule,
     MatIconModule,
-    MatExpansionModule
+    MatExpansionModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

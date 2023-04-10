@@ -1,0 +1,114 @@
+ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 2px solid #b1b1b1;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  padding-top: 7px;
+  li{
+    a{
+      font-size: 18px;
+      display: inline-block;
+      padding: 5px !important;
+      margin: 9px 10px;
+      border-radius: 5px;
+      &:hover{
+        background: #008381d4;
+        color: #fff;
+        text-decoration: none;
+      }
+    }
+  }
+}
+.content-sondeos {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem;
+  flex-wrap: wrap;
+  a {
+    padding: 1.5rem !important;
+  }
+}
+.btns-delete{
+  button{
+    margin:0 5px;
+  }
+}
+.header{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 1rem;
+}
+.mat-mini-fab {
+  width: 24px;
+  height: 24px;
+  padding-top: 7px;
+}
+.mat-icon-sm{
+  font-size: 16px;
+}
+.sondeo{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+::ng-deep{
+  & .mat-expansion-panel-header-title{
+    justify-content: center;
+    color: white;
+  }
+  & .mat-expansion-panel-header{
+    background: #157b7e !important;
+  }
+  & .mat-expansion-panel:not(.mat-expanded).mat-expansion-panel-header:hover:not([aria-disabled=true]){
+    background: #165b5e !important;
+  }
+  & .mat-expansion-panel-header.mat-expanded:hover{
+    background: #165b5e !important;
+  }
+  & .mat-expansion-panel-body {
+    padding: 0 5px 5px !important;
+  }
+}
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+

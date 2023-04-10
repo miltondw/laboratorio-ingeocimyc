@@ -4,6 +4,7 @@ import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProyectosComponent } from './pages/proyectos/proyectos.component';
+import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,10 @@ const routes: Routes = [
       {
         path:'laboratorio/ensayo/:id',
         component:EnsayosComponent
+      },
+      {
+        path:'pdf',
+        component:PdfExampleComponent
       }
   ]
 }
