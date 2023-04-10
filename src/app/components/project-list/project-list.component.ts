@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { LaboratorioService } from '@app/services/laboratorio.service'
 import { IEnsayos } from '@app/models/Ensayos.model'
 import { MatTableDataSource } from '@angular/material/table';
-
+import {animate, state, style, transition, trigger} from '@angular/animations';
 export interface IProjectsList {
   id: string,
   titile: string;
@@ -18,16 +18,25 @@ export interface IProjectsList {
 @Component({
   selector: 'app-project-list',
   templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+  styleUrls: ['./project-list.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class ProjectListComponent implements OnInit {
-  displayedColumns: string[] = ['titile', 'location', 'date', 'state', 'sondeos', 'delete'];
+  displayedColumns: string[] = ['titile', 'location', 'date', 'state', 'delete'];
   projectsList: IProjectsList[] = []
   dataSource = new MatTableDataSource(this.projectsList);
   values: IEnsayos[] | null = null
   panelOpenState = false;
   activeDeleteSondeo = false
   activeDeleteMuestra = false
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  expandedElement: IProjectsList | null=null;
   constructor (
     private ensayoService: LaboratorioService,
     private projectService: ProjectService

@@ -23,9 +23,10 @@ ul {
   }
 }
 .content-sondeos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  display: flex;
   gap: 1rem;
+  margin: 1rem;
+  flex-wrap: wrap;
   a {
     padding: 1.5rem !important;
   }
@@ -53,6 +54,61 @@ ul {
   align-items: center;
   gap: 0.5rem;
 }
-::ng-deep .mat-expansion-panel-body {
-  padding: 0 5px 5px !important;
+::ng-deep{
+  & .mat-expansion-panel-header-title{
+    justify-content: center;
+    color: white;
+  }
+  & .mat-expansion-panel-header{
+    background: #157b7e !important;
+  }
+  & .mat-expansion-panel:not(.mat-expanded).mat-expansion-panel-header:hover:not([aria-disabled=true]){
+    background: #165b5e !important;
+  }
+  & .mat-expansion-panel-header.mat-expanded:hover{
+    background: #165b5e !important;
+  }
+  & .mat-expansion-panel-body {
+    padding: 0 5px 5px !important;
+  }
 }
+
+table {
+  width: 100%;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-element-row td {
+  border-bottom-width: 0;
+}
+
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}
+

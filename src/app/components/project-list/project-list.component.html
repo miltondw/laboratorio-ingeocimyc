@@ -23,131 +23,161 @@
   </div>
 </div>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <ng-container matColumnDef="titile">
-    <th mat-header-cell *matHeaderCellDef>Titulo</th>
+<table
+  mat-table
+  [dataSource]="dataSource"
+  multiTemplateDataRows
+  class="mat-elevation-z8"
+>
+  <ng-container
+    matColumnDef="{{ column }}"
+    *ngFor="let column of displayedColumns"
+  >
+    <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
     <td mat-cell *matCellDef="let element">
-      {{ element.titile }}
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="location">
-    <th mat-header-cell *matHeaderCellDef>Ubicación</th>
-    <td mat-cell *matCellDef="let element">{{ element.location }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="date">
-    <th mat-header-cell *matHeaderCellDef>Fecha</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.date | date : "dd-MM-yyyy" }}
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="sondeos">
-    <th mat-header-cell *matHeaderCellDef>Sondeos</th>
-    <td mat-cell *matCellDef="let element">
-      <div class="content-sondeos">
-        <ng-container *ngFor="let sondeo of element.sondeos">
-          <div
-            class="sondeo"
-            *ngIf="
-              element.capas[sondeo - 1] && element.capas[sondeo - 1].length > 1;
-              else capaLink
-            "
-          >
-            <mat-accordion hideToggle>
-              <mat-expansion-panel
-                (opened)="panelOpenState = true"
-                (closed)="panelOpenState = false"
-              >
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    {{ sondeo }}
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <mat-panel-title> Muestra </mat-panel-title>
-                <ul>
-                  <li *ngFor="let layer of element.capas[sondeo - 1]">
-                    <a
-                      [routerLink]="['/laboratorio/ensayo', element.id]"
-                      [queryParams]="{ probe: sondeo, layer }"
-                    >
-                      {{ layer }}
-                    </a>
-                    <button
-                    *ngIf="activeDeleteMuestra"
-                      mat-mini-fab
-                      class="mat-mini-fab"
-                      color="warn"
-                      (click)="deleteMuestra(element.id, sondeo - 1, layer - 1)"
-                    >
-                      <mat-icon class="mat-icon-sm">delete</mat-icon>
-                    </button>
-                  </li>
-                </ul>
-              </mat-expansion-panel>
-            </mat-accordion>
-            <div class="btn-delete">
-              <button
-              *ngIf="activeDeleteSondeo"
-              mat-mini-fab
-              class="mat-mini-fab"
-              color="warn"
-              (click)="deleteSondeo(element.id, sondeo - 1)"
-            >
-              <mat-icon class="mat-icon-sm">delete</mat-icon>
-            </button>
-            </div>
-          </div>
-          <ng-template #capaLink>
-            <div class="sondeo">
-              <a
-                mat-raised-button
-                [routerLink]="['/laboratorio/ensayo', element.id]"
-                [queryParams]="{ probe: sondeo, layer: 1 }"
-              >
-                {{ sondeo }}
-              </a>
-              <button
-                mat-mini-fab
-                class="mat-mini-fab"
-                color="warn"
-                *ngIf="activeDeleteSondeo"
-                (click)="deleteSondeo(element.id, sondeo - 1)"
-              >
-                <mat-icon class="mat-icon-sm">delete</mat-icon>
-              </button>
-            </div>
-          </ng-template>
-        </ng-container>
-      </div>
-    </td>
-  </ng-container>
-
-  <ng-container matColumnDef="state">
-    <th mat-header-cell *matHeaderCellDef>Estado</th>
-    <td mat-cell *matCellDef="let element">{{ element.state }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="delete">
-    <th mat-header-cell *matHeaderCellDef>Eliminar</th>
-    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="column==='date' ;else columns">
+        {{ element.date | date : "dd-MM-yyyy" }}
+      </ng-container>
+      <ng-template #columns>
+        {{ element[column] }}
+      </ng-template>
       <button
         mat-mini-fab
         color="warn"
         (click)="deleteEnsayo(element.id)"
+        *ngIf="column==='delete'"
       >
         <mat-icon>delete</mat-icon>
       </button>
     </td>
   </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-  <tr class="mat-row" *matNoDataRow>
-    <td class="mat-cell" colspan="4">
-      No existe coincidencia para el proyecto: "{{ input.value }}"
+  <ng-container matColumnDef="expand">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      Sondeos
+      <button
+        mat-icon-button
+        aria-label="expand row"
+        (click)="
+          expandedElement = expandedElement === element ? null : element;
+          $event.stopPropagation()
+        "
+      >
+        <mat-icon *ngIf="expandedElement !== element"
+          >keyboard_arrow_down</mat-icon
+        >
+        <mat-icon *ngIf="expandedElement === element"
+          >keyboard_arrow_up</mat-icon
+        >
+      </button>
     </td>
-  </tr>
+  </ng-container>
+  <ng-container matColumnDef="expandedDetail">
+    <td
+      mat-cell
+      *matCellDef="let element"
+      [attr.colspan]="columnsToDisplayWithExpand.length"
+    >
+      <div
+        class="example-element-detail"
+        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'"
+      >
+        <div class="content-sondeos">
+          <ng-container *ngFor="let sondeo of element.sondeos">
+            <div
+              class="sondeo"
+              *ngIf="
+                element.capas[sondeo - 1] &&
+                  element.capas[sondeo - 1].length > 1;
+                else capaLink
+              "
+            >
+              <mat-accordion hideToggle>
+                <mat-expansion-panel
+                  (opened)="panelOpenState = true"
+                  (closed)="panelOpenState = false"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ sondeo }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <mat-panel-title> Muestra </mat-panel-title>
+                  <ul>
+                    <li *ngFor="let layer of element.capas[sondeo - 1]">
+                      <a
+                        mat-raised-button
+                        color="primary"
+                        [routerLink]="['/laboratorio/ensayo', element.id]"
+                        [queryParams]="{ probe: sondeo, layer }"
+                      >
+                        {{ layer }}
+                      </a>
+                      <button
+                        *ngIf="activeDeleteMuestra"
+                        mat-mini-fab
+                        class="mat-mini-fab"
+                        color="warn"
+                        (click)="
+                          deleteMuestra(element.id, sondeo - 1, layer - 1)
+                        "
+                      >
+                        <mat-icon class="mat-icon-sm">delete</mat-icon>
+                      </button>
+                    </li>
+                  </ul>
+                </mat-expansion-panel>
+              </mat-accordion>
+              <div class="btn-delete">
+                <button
+                  *ngIf="activeDeleteSondeo"
+                  mat-mini-fab
+                  class="mat-mini-fab"
+                  color="warn"
+                  (click)="deleteSondeo(element.id, sondeo - 1)"
+                >
+                  <mat-icon class="mat-icon-sm">delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <ng-template #capaLink>
+              <div class="sondeo">
+                <a
+                  mat-raised-button
+                  color="primary"
+                  [routerLink]="['/laboratorio/ensayo', element.id]"
+                  [queryParams]="{ probe: sondeo, layer: 1 }"
+                >
+                  {{ sondeo }}
+                </a>
+                <button
+                  mat-mini-fab
+                  class="mat-mini-fab"
+                  color="warn"
+                  *ngIf="activeDeleteSondeo"
+                  (click)="deleteSondeo(element.id, sondeo - 1)"
+                >
+                  <mat-icon class="mat-icon-sm">delete</mat-icon>
+                </button>
+              </div>
+            </ng-template>
+          </ng-container>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+  <tr
+    mat-row
+    *matRowDef="let element; columns: columnsToDisplayWithExpand"
+    class="example-element-row"
+    [class.example-expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : element"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: ['expandedDetail']"
+    class="example-detail-row"
+  ></tr>
 </table>
