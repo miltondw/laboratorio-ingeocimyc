@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PdfExampleComponent } from './pdf-example.component';
+import { GraficaLimitesComponent } from './grafica-limites.component';
 
-describe('PdfExampleComponent', () => {
-  let component: PdfExampleComponent;
-  let fixture: ComponentFixture<PdfExampleComponent>;
+describe('GraficaLimitesComponent', () => {
+  let component: GraficaLimitesComponent;
+  let fixture: ComponentFixture<GraficaLimitesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PdfExampleComponent ]
+      declarations: [ GraficaLimitesComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PdfExampleComponent);
+    fixture = TestBed.createComponent(GraficaLimitesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

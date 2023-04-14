@@ -5,7 +5,7 @@ import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.componen
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProyectosComponent } from './pages/proyectos/proyectos.component';
 import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
-
+import { GraficaLimitesComponent } from './components/grafica-limites/grafica-limites.component';
 const routes: Routes = [
   {
     path: '',
@@ -31,6 +31,10 @@ const routes: Routes = [
       {
         path:'pdf',
         component:PdfExampleComponent
+      },
+      {
+        path:'grafica',
+        component:GraficaLimitesComponent
       }
   ]
 }
