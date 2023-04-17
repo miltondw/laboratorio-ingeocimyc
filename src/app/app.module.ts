@@ -36,6 +36,7 @@ import { ProjectListComponent } from './components/project-list/project-list.com
 import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
 import { NgChartsModule } from 'ng2-charts';
 import { GraficaLimitesComponent } from './components/grafica-limites/grafica-limites.component';
+import { GraficaGranulometriaComponent } from './components/grafica-granulometria/grafica-granulometria.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { GraficaLimitesComponent } from './components/grafica-limites/grafica-li
     ProyectosComponent,
     ProjectListComponent,
     PdfExampleComponent,
-    GraficaLimitesComponent
+    GraficaLimitesComponent,
+    GraficaGranulometriaComponent
   ],
   imports: [
     BrowserModule,

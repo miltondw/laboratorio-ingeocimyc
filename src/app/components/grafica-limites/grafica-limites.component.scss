@@ -8,10 +8,11 @@
   border-radius: 10px;
 }
 .chart-content{
-  width:48vw !important;
-  height:68vh !important;
+  width:40vw !important;
+  height:60vh !important;
   display: flex;
   background: transparent;
+  position:relative;
   canvas{
     background:#ffff;
     border: 3px solid;
@@ -25,7 +26,7 @@
       padding: 0.2rem 1rem;
       position: absolute;
       top: 45%;
-      left: -3.7rem;
+      left: -21%;
       font-size: 19px;
       color: white;
     }
@@ -39,4 +40,7 @@
   font-size: 18px;
   margin-top: 1rem;
 }
-
+.graficas{
+  display: flex;
+  justify-content: center;
+}
