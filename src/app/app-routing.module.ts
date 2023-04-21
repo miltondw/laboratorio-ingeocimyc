@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.component';
-import { LayoutComponent } from './components/layout/layout.component';
+import { LayoutComponent } from './components/molecules/layout/layout.component';
 import { ProyectosComponent } from './pages/proyectos/proyectos.component';
-import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
-import { GraficaLimitesComponent } from './components/grafica-limites/grafica-limites.component';
+import { InformeEnsayosComponent } from './pages/informe-ensayos/informe-ensayos.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -29,13 +29,10 @@ const routes: Routes = [
         component:EnsayosComponent
       },
       {
-        path:'pdf',
-        component:PdfExampleComponent
+        path:'laboratorio/informe-ensayos/:id',
+        component:InformeEnsayosComponent
       },
-      {
-        path:'grafica',
-        component:GraficaLimitesComponent
-      }
+
   ]
 }
 ];

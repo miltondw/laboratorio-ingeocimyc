@@ -1,0 +1,166 @@
+<!-- <app-grafica-granulometria [SetPorcentajeQuePasa]="porcentajeQuePasa" /> -->
+<button (click)="generatePDF()">Generar PDF</button>
+<div class="ensayos" >
+<header id="pdfEnsayo-1">
+  <div class="header">
+    <img src="/assets/logo-letras.jpg" alt="logo Ingeocimyc">
+    <div class="title">
+      <h2>
+        DETERMINACIÓN DEL LIMITE LIQUIDO, LIMITE PLASTICO E INDICE DE PLASTICIDAD DE LOS SUELOS Y GRANULOMETRÍA
+      </h2>
+      <h3>LABORATORIO DE GEOTECNIA Y CONCRETOS</h3>
+      <p>INV- 125-13 INV 126-13</p>
+    </div>
+  </div>
+  <div class="content-data">
+    <p class="location">
+      <span>LOCALIZACIÓN: </span>
+      {{project.location}}
+    </p>
+    <p class="referencia">
+      <span>referencia:</span>
+      <!-- {{project.referencia}} -->
+      COLEGIO MONSEÑOR DÍAS PLATA
+    </p>
+    <p class="project">
+      <span>PROYECTO: </span>
+      {{project.title}}
+    </p>
+    <p class="solicitante">
+      <span>SOLICITANTE:</span>
+      <!-- {{project?.solicitante}} -->
+      JUANCOL INGENIERÍA SAS
+    </p>
+    <p class="date">
+      <span>FECHA:</span>
+      {{project.date | date : "dd-MM-yyyy" }}
+    </p>
+  </div>
+</header>
+<ng-container *ngFor="let sondeo of project.sondeos">
+  <ng-container *ngFor="let muestra of sondeo.muestras; index as i">
+  <div class="limites" [id]="'pdfEnsayo-' + (i+2)">
+        <header>
+          <div class="sondeo-capa">
+            <p>
+              Sondeo:
+              <span>
+                {{sondeo.sondeo}}
+              </span>
+            </p>
+            <p>
+              capa:
+              <span>
+                <!-- {{project.referencia}} -->
+                {{i+1}}
+              </span>
+            </p>
+          </div>
+        </header>
+      <div class="content-carts">
+        <div class="carts-limites">
+          <div class="liquido-plastico">
+            <div class="content-liquido">
+              <h2>Limite Liquido</h2>
+              <div class="data">
+                <table mat-table [dataSource]="dataLiquido" class="mat-elevation-z8">
+                  <ng-container *ngFor="let column of columnsLiquido">
+                    <ng-container [matColumnDef]="column">
+                      <th mat-header-cell *matHeaderCellDef>{{column}} </th>
+                      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+                    </ng-container>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="columnsLiquido"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columnsLiquido;"></tr>
+                </table>
+                <p class="limite">
+                  LIMITE LIQUIDO % <span>41.10</span>
+                </p>
+              </div>
+            </div>
+            <div class="content-plastico">
+              <h2>Limite plastico</h2>
+              <div class="data">
+                <table mat-table [dataSource]="dataPlastico" class="mat-elevation-z8">
+                  <ng-container *ngFor="let column of columnsPlastico">
+                    <ng-container [matColumnDef]="column">
+                      <th mat-header-cell *matHeaderCellDef>{{column}} </th>
+                      <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+                    </ng-container>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="columnsPlastico"></tr>
+                  <tr mat-row *matRowDef="let row; columns: columnsPlastico;"></tr>
+                </table>
+                <p class="limite">
+                  LIMITE PLASTICO % <span>26.39</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <p class="limite">
+            INDICE DE PLASTICIDAD % <span>14.71</span>
+          </p>
+          <app-grafica-limites *ngIf="muestra?.ensayoLiquido?.primera?.Humidity" [SetValoresXY]="{
+              porcentajeHumedad:[
+                muestra.ensayoLiquido.primera.Humidity,
+                muestra.ensayoLiquido.segunda.Humidity,
+                muestra.ensayoLiquido.tercera.Humidity
+              ],
+              numeroDeGolpes:[
+                muestra.ensayoLiquido.primera.NumberOfStrokes,
+                muestra.ensayoLiquido.segunda.NumberOfStrokes,
+                muestra.ensayoLiquido.tercera.NumberOfStrokes
+              ]}" />
+        </div>
+        <div class="carts-granulometria">
+          <div class="data">
+            <p class="granulometria">
+             GRANULOMETRÍA
+            </p>
+            <table mat-table [dataSource]="dataGranulometria" class="mat-elevation-z8">
+              <ng-container *ngFor="let column of columnsGranulometria">
+                <ng-container [matColumnDef]="column">
+                  <th mat-header-cell *matHeaderCellDef>{{column}} </th>
+                  <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+                </ng-container>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="columnsGranulometria"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnsGranulometria;"></tr>
+            </table>
+            <div>
+              <ul>
+                <li>
+                   <span>PROF ALC: </span>1,35 M
+                  </li>
+                <li>
+                  <span> ESPESOR: </span> 1,35 M
+                </li>
+                <li>
+                  <span> HUMEDAD: </span> 19,35 %
+                </li>
+                <li>
+                 <span> GRAVA: </span> 1,53%
+                </li>
+                <li>
+                  <span>ARENA:</span> 44,16%
+                </li>
+                <li>
+                   <span>FINOS:</span>44,31%
+                </li>
+              </ul>
+              <div>
+                <mat-form-field  appearance="outline"  >
+                  <mat-label>CLASIFICACIÓN:S.U.C.S</mat-label>
+                  <input type="number" matInput >
+                </mat-form-field>
+              </div>
+<!-- S.U.C.S	SM= ARENA LIMOSA DE MEDIANA PLASTICIDAD CON GRAVAS		 -->
+            </div>
+          </div>
+          <app-grafica-granulometria />
+        </div>
+      </div>
+  </div>
+  </ng-container>
+</ng-container>
+</div>

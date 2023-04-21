@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
 //Imports
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms'
-import { AppComponent } from './app.component';
+import { NgChartsModule } from 'ng2-charts';
 //Material
 import { MatListModule } from '@angular/material/list';
 import { MatFormFieldModule } from '@angular/material/form-field'
@@ -20,9 +21,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.component';
 import { ProyectosComponent } from './pages/proyectos/proyectos.component';
-
+import { InformeEnsayosComponent } from './pages/informe-ensayos/informe-ensayos.component';
 //Components
-import { HeaderComponent } from './components/header/header.component';
+//Forms
 import { FormHeaderComponent } from './components/forms/form-header/form-header.component';
 import { FormEnsayoDeHumedadComponent } from './components/forms/form-ensayo-de-humedad/form-ensayo-de-humedad.component';
 import { FormGranulometriaComponent } from './components/forms/form-granulometria/form-granulometria.component';
@@ -30,13 +31,17 @@ import { FormLimiteLiquidoComponent } from './components/forms/form-limite-liqui
 import { FormLimitePlasticoComponent } from './components/forms/form-limite-plastico/form-limite-plastico.component';
 import { FormFooterComponent } from './components/forms/form-footer/form-footer.component';
 import { FormCreateEnsayoComponent } from './components/forms/form-create-ensayo/form-create-ensayo.component';
-import { LayoutComponent } from './components/layout/layout.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { ProjectListComponent } from './components/project-list/project-list.component';
+//Molecules
+import { HeaderComponent } from './components/molecules/header/header.component';
+import { LayoutComponent } from './components/molecules/layout/layout.component';
+import { NavbarComponent } from './components/molecules/navbar/navbar.component';
+import { ProjectListComponent } from './components/molecules/project-list/project-list.component';
+//Graficas
+import { GraficaLimitesComponent } from './components/graficas/grafica-limites/grafica-limites.component';
+import { GraficaGranulometriaComponent } from './components/graficas/grafica-granulometria/grafica-granulometria.component';
+import { GraficasEnsayosComponent } from './components/graficas/graficas-ensayos/graficas-ensayos.component';
+//Others
 import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
-import { NgChartsModule } from 'ng2-charts';
-import { GraficaLimitesComponent } from './components/grafica-limites/grafica-limites.component';
-import { GraficaGranulometriaComponent } from './components/grafica-granulometria/grafica-granulometria.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +62,9 @@ import { GraficaGranulometriaComponent } from './components/grafica-granulometri
     ProjectListComponent,
     PdfExampleComponent,
     GraficaLimitesComponent,
-    GraficaGranulometriaComponent
+    GraficaGranulometriaComponent,
+    GraficasEnsayosComponent,
+    InformeEnsayosComponent
   ],
   imports: [
     BrowserModule,

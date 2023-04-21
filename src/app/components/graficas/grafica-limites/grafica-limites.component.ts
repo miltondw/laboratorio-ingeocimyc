@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { Chart, ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { default as Annotation } from 'chartjs-plugin-annotation';
@@ -9,10 +9,22 @@ import { calcularTendencia } from '@app/utils/tendencia';
   templateUrl: './grafica-limites.component.html',
   styleUrls: ['./grafica-limites.component.scss']
 })
+
 export class GraficaLimitesComponent implements AfterViewInit {
-  porcentajeHumedad = [31.95, 33.84, 35.24];
-  numeroDeGolpes = [33, 24, 17];
-  limiteLiquido: number[] = [];
+
+  @Input()
+  set SetValoresXY({ porcentajeHumedad, numeroDeGolpes }: { 
+    porcentajeHumedad: number[], numeroDeGolpes: number[] }) {
+    this.porcentajeHumedad = porcentajeHumedad;
+    this.numeroDeGolpes = numeroDeGolpes;
+    this.limiteLiquido = calcularTendencia(numeroDeGolpes,porcentajeHumedad);
+    this.crearGrafica()
+  }
+
+  porcentajeHumedad:number[] = [];
+  numeroDeGolpes:number[] = [];
+  limiteLiquido: number = 0;
+
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   ngAfterViewInit() {
@@ -21,26 +33,18 @@ export class GraficaLimitesComponent implements AfterViewInit {
       this.chart?.update();
     });
   }
-  constructor () {
-    const valores = this.numeroDeGolpes;
-    valores.shift();
-    valores.unshift(25);
-    this.numeroDeGolpes = [33, 24, 17];
-    this.limiteLiquido = calcularTendencia(
-      this.numeroDeGolpes,
-      this.porcentajeHumedad,
-      valores
-    );
+
+  crearGrafica(){
     Chart.register(Annotation);
     this.lineChartData = {
       datasets: [
         {
           data: [
-            { x: this.limiteLiquido[0], y: 25 },
-            { x: this.limiteLiquido[0], y: 10 },
+            { x: this.limiteLiquido, y: 25 },
+            { x: this.limiteLiquido, y: 10 },
           ],
           type: 'line',
-          label: `Tendencia=${this.limiteLiquido[0]}`,
+          label: `Tendencia=${this.limiteLiquido}`,
           backgroundColor: 'rgba(51,51,255,0.2)',
           borderColor: 'rgba(51,51,225,1)',
           borderDash: [5, 5],
@@ -52,7 +56,7 @@ export class GraficaLimitesComponent implements AfterViewInit {
             y: this.numeroDeGolpes[i],
           })),
           type: 'line',
-          label: 'Datos',
+          label: 'Golpes',
           backgroundColor: 'rgba(255, 99, 132, 1)',
           borderColor: 'rgba(255, 99, 132, 1)',
           fill: false,
@@ -132,22 +136,4 @@ export class GraficaLimitesComponent implements AfterViewInit {
   public lineChartType: ChartType = 'scatter';
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-
-  // public chartClicked({
-  //   event,
-  //   active,
-  // }: {
-  //   event?: ChartEvent;
-  //   active?: {}[];
-  // }): void {
-  //   console.log(event, active);
-  // }
-
-  // public chartHovered({
-  //   event,
-  //   active,
-  // }: {
-  //   event?: ChartEvent;
-  //   active?: {}[];
-  // }): void { }
 }

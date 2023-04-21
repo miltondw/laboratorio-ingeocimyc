@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef,Input } from '@angular/core';
 import { Chart, ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { default as Annotation } from 'chartjs-plugin-annotation';
@@ -9,9 +9,14 @@ import { default as Annotation } from 'chartjs-plugin-annotation';
   styleUrls: ['./grafica-granulometria.component.scss']
 })
 export class GraficaGranulometriaComponent implements AfterViewInit {
-
-  vY = [100, 100, 99.23, 98.54, 98.04, 95.17, 90.58, 72.60, 34.52]
-  vX = [50.80, 25.40, 19, 12.70, 9.53, 4.75, 2, 0.425, 0.075]
+  //Get
+  @Input()
+  set SetPorcentajeQuePasa(value: number[]) {
+    this.porcentajeQuePasa = value;
+  }
+  porcentajeQuePasa:number[] = [100, 100, 99.23, 98.54, 98.04, 95.17, 90.58, 72.60, 34.52]
+  //Const
+  tamices:number[] = [50.80, 25.40, 19, 12.70, 9.53, 4.75, 2, 0.425, 0.075]
 
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
@@ -27,14 +32,15 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
     this.lineChartData = {
       datasets: [
         {
-          data: this.vX.map((x, i) => ({
+          data: this.tamices.map((x, i) => ({
             x: x,
-            y: this.vY[i],
+            y: this.porcentajeQuePasa[i],
           })),
           type: 'line',
           label: 'Datos',
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'red',
+          borderColor: 'red',
+          pointBackgroundColor:'rgba(0,0,0,0.9)',
           fill: false,
         },
       ],
@@ -43,18 +49,17 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
       aspectRatio: 1.5,
       responsive: true,
       maintainAspectRatio: false,
-      backgroundColor: 'rgba(255, 99, 132, 1)',
-      color: 'rgba(0,0,0,1)',
       elements: {
         point: {
           radius: 6,
           borderWidth: 2,
           hoverRadius: 8,
           hoverBorderWidth: 3,
+
         },
         line: {
           borderWidth: 3,
-          tension: 0.5,
+          tension: 0.3,
         },
       },
       plugins: {
@@ -71,7 +76,7 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
         y: {
           min: 0,
           max: 100,
-          type:'linear',
+          type: 'linear',
           ticks: {
             stepSize: 10,
             color: 'rgba(0,0,0,1)',
@@ -87,28 +92,18 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
         x: {
           reverse: true,
           type: 'logarithmic',
-          //base: 10,
-          min:0.01,
-          max:100,
-          //type: 'category',
-         // labels: ['0.01', '0.1', '10', '100'],
+          min: 0.01,
+          max: 100,
           ticks: {
-            //values: [0.01, 0.1, 10, 100],
             display: true,
-            //callback: (value, index, values) => {
-              //return value.toLocaleString();
-            //},
             callback: function (value, index, values) {
-          // lista de valores personalizados
-          const customValues = [0.01, 0.1, 10, 100];
-          
-          // devuelve el valor personalizado correspondiente o el valor original si no hay un valor personalizado para este valor
-          if (customValues.indexOf(Number(value)) !== -1) {
-            return value;
-          } else {
-            return '';
-          }
-        },
+              const customValues = [0.01, 0.1, 10, 100];
+              if (customValues.indexOf(Number(value)) !== -1) {
+                return value;
+              } else {
+                return '';
+              }
+            },
             font: {
               size: 16,
             },
@@ -126,9 +121,7 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
   public lineChartData: ChartConfiguration['data'] = { datasets: [] };
 
   public lineChartOptions: ChartConfiguration['options'] = {};
- // type MyChartType = 'line' | 'bar' | 'radar' | 'doughnut' | 'polarArea' | 'bubble' | 'scatter' | 'logarithmic';
   public lineChartType: ChartType = 'line';
-
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
 }

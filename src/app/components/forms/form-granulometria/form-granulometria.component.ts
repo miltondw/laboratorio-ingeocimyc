@@ -1,8 +1,8 @@
-import { LaboratorioService } from './../../../services/laboratorio.service';
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { ELEMENT_DATA } from './data'
 import { IGranulometria } from '@app/models/ensayoDeGranulometria.model'
 import { IEnsayos } from '@app/models/Ensayos.model';
+import { LaboratorioService } from '@app/services/laboratorio.service';
 import { ProjectService } from '@app/services/project.service'
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -12,7 +12,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./form-granulometria.component.scss']
 })
 export class FormGranulometriaComponent {
-
+//   @Input()
+//  set setInforme(value:{informe:boolean,capa:number,sondeo:number,id:string}){
+//       if(value.informe && value.capa>=0 && value.id){
+//         this.informe=value.informe
+//         this.capa=value.capa+1
+//         this.projectIdValue=value.id
+//         this.numberSondeo=value.sondeo
+//         this.project = this.projectService.getProject(this.projectIdValue).project
+//          this.update(this.numberSondeo, this.capa)
+//       }
+//     }
+  informe=false
   displayedColumns: string[] = [
     'pulgada',
     'mm',
@@ -54,6 +65,7 @@ export class FormGranulometriaComponent {
   ngOnInit() {
     this.projectIdValue = this.projectService.projectId
     this.project = this.projectService.getProject(this.projectIdValue).project
+    if(!this.informe){
     this.form.reset()
     this.values = {}
     this.laboratorioService.queryProbe$.subscribe(probe => {
@@ -67,6 +79,7 @@ export class FormGranulometriaComponent {
         this.update(this.numberSondeo, layer)
       }
     })
+    }
   }
 
   onSubmit() {

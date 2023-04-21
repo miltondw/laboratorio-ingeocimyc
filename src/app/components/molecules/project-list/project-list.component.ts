@@ -1,15 +1,15 @@
-import { ProjectService } from './../../services/project.service';
 import { Component, OnInit } from '@angular/core';
+import { ProjectService } from '@app/services/project.service';
 import { LaboratorioService } from '@app/services/laboratorio.service'
 import { IEnsayos } from '@app/models/Ensayos.model'
 import { MatTableDataSource } from '@angular/material/table';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+
 export interface IProjectsList {
   id: string,
   titile: string;
   location: string;
   date: Date;
-  state?: string;
   sondeos: number[]
   capas?: (number | number[])[][],
   project?: IEnsayos
@@ -28,7 +28,7 @@ export interface IProjectsList {
   ],
 })
 export class ProjectListComponent implements OnInit {
-  displayedColumns: string[] = ['titile', 'location', 'date', 'state', 'delete'];
+  displayedColumns: string[] = ['titile', 'location', 'date', 'delete','informe'];
   projectsList: IProjectsList[] = []
   dataSource = new MatTableDataSource(this.projectsList);
   values: IEnsayos[] | null = null
@@ -64,7 +64,6 @@ export class ProjectListComponent implements OnInit {
         titile: project.title,
         sondeos,
         capas,
-        state: 'pendiente'
       }
       if (!id) {
         this.projectsList.push(projectList)
@@ -113,6 +112,7 @@ export class ProjectListComponent implements OnInit {
       this.activeDeleteMuestra = false
     }
   }
+
   onActiveDeleteSondeo() {
     this.activeDeleteSondeo = !this.activeDeleteSondeo
   }
