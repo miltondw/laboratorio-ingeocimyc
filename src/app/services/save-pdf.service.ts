@@ -2,47 +2,19 @@ import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { IEnsayos } from '@app/models/Ensayos.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class SavePdfService {
+  loading$ = new BehaviorSubject<boolean>(false);
 
   constructor () { }
-  loading:boolean=false
-
-  // async save(project: IEnsayos): Promise<void> {
-  //   const idT = 'pdfEnsayo'
-  //   const title =`${project.title.split(' ').join('-')}.pdf`
-  //   const pdf = new jsPDF('p', 'mm', 'a4', true);
-  //   let pageCount = 1;
-  //   for (const [indexSondeo, sondeo] of project.sondeos.entries()) {
-  //     for (let indexMuestra = 0; indexMuestra < sondeo.muestras.length; indexMuestra++) {
-  //       const Granulometria=sondeo.muestras[indexMuestra].ensayoGranulometria.data?.grava
-  //       const ensayoLiquido=sondeo.muestras[indexMuestra].ensayoLiquido?.limiteLiquido
-  //       const ensayoPlastico=sondeo.muestras[indexMuestra].ensayoPlastico?.primera?.Humidity
-  //       if (Granulometria && ensayoLiquido && ensayoPlastico) {
-  //         const id=`${idT}-${indexSondeo}${indexMuestra}`
-  //         const elementToExport = document.getElementById(id) as HTMLElement;
-  //         const canvas = await html2canvas(elementToExport);
-  //         canvas.getContext("2d", {
-  //           willReadFrequently: true,
-  //         });
-  //         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 15, 20, 180, 250);
-  //         pdf.addPage();
-  //         pageCount++;
-  //         if (indexSondeo == project.sondeos.length - 1) pdf.save(title);
-  //       }
-  //     }
-  //   }
-
-  //   pdf.deletePage(pageCount);
-  //   pdf.save(`${project.title.split(',')[0].split(' ').join('-').toLocaleLowerCase()}.pdf`);
-  //   this.loading=false
-  // }
+  // loading:boolean=false
   async save(project: IEnsayos): Promise<void> {
-    this.loading=true
+    this.loading$.next(true);
     const idT = 'pdfEnsayo';
     const title = `${project.title.split(',')[0].split(' ').join('-').toLocaleLowerCase()}.pdf`;
     const pdf = new jsPDF('p', 'mm', 'a4', true);
@@ -76,10 +48,10 @@ export class SavePdfService {
       }
       pdf.deletePage(pageCount);
       pdf.save(title);
-      this.loading=false
+      this.loading$.next(false);
     } catch (error) {
       console.error('Error al guardar el archivo PDF:', error);
-      this.loading=false
+      this.loading$.next(false);
     }
   }
 

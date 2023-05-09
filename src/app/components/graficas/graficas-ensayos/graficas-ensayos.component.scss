@@ -1,9 +1,18 @@
+.loading {
+  position: absolute;
+  top: 10px;
+  right: 1rem;
+  display:flex;
+  gap:1rem;
+  align-items: center;
+}
+
 .ensayos {
   display: grid;
   .pdfEnsayo {
     padding: 0;
     border: 35px solid #9f9f9f;
-    margin:3rem 0;
+    margin: 3rem 0;
   }
   & > header {
     margin-bottom: 4.5rem;
@@ -12,60 +21,76 @@
     .content-carts {
       display: grid;
       margin-top: 3rem;
-      grid-template-columns: 1fr 1fr;
       width: 100%;
       justify-items: center;
       .carts-limites {
-        width: 95%;
+        width: 100%;
         position: relative;
         top: 3.8rem;
-        .datos{
-          display: flex;
-          flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 40% 60%;
+        gap: 3rem;
+        left: 1rem;
+
+        .datos {
           gap: 1rem;
           justify-content: center;
           margin-bottom: 3rem;
-          margin-top: 5.6rem;
+          margin-top: 5rem;
           position: relative;
           bottom: 5.8rem;
-          font-size: 18px;
-        .limite {
-          font-weight: 500;
-          border-bottom: 2px solid #999999;
-          width: fit-content;
-          margin: 0;
-          padding: 10px;
-          span {
-            padding: 5px;
-           background: rgb(43, 154, 166);
-           color:#fff;
-          border-radius: 5px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          justify-items: center;
+          align-items: center;
+          font-size: 17px;
+          left: 7rem;
+          width: 76%;
+
+          .limite {
+            font-weight: 500;
+            border-bottom: 2px solid #999999;
+            width: fit-content;
+            margin: 0;
+            padding: 10px;
+
+            white-space: nowrap;
+
+            span {
+              padding: 5px;
+              background: rgb(43, 154, 166);
+              color: #fff;
+              border-radius: 5px;
+            }
+            &:first-child span {
+              background: rgb(43, 154, 166);
+            }
+            &:last-child {
+              grid-area: 2 / span 2;
+              span {
+                background: #010101;
+              }
+            }
           }
-          &:first-child span{
-          background: rgb(43, 154, 166);
-          }
-          &:last-child{
-            position: relative;
-            top: 2rem;
-          span {
-            background: #010101;
-          }
-          }
-          }
+        }
+        .grafica-limites {
+          position: relative;
+          top: -17%;
+          left: 14%;
         }
 
         .liquido-plastico {
           display: flex;
-          width: 110%;
+          width: 125%;
           gap: 1rem;
           margin-bottom: 3.1rem;
           position: relative;
           left: 3px;
-          table{
-          tr{
-            td:first-child{
-            text-align: left !important;
-            }
+          table {
+            tr {
+              td:first-child {
+                text-align: left !important;
+              }
             }
           }
           h2 {
@@ -109,7 +134,7 @@
 
         th {
           font-size: 16px !important;
-          padding:0 !important;
+          padding: 0 !important;
         }
 
         td {
@@ -120,18 +145,31 @@
           &:last-child {
             border-right: 0 !important;
           }
-         }
+        }
       }
 
       .carts-granulometria {
         position: relative;
-        top: -1.12rem;
+        top: 3rem;
+
+        display: flex;
+        width: 100%;
+        align-items: center;
+        .grafica-2 {
+          position: relative;
+          top: -2.5rem;
+        }
+        .grafica-granulometria {
+          position: relative;
+          top: -2rem;
+          left: 1.2rem;
+        }
         .data {
           display: grid;
-          width: 80%;
-          margin-left: 53px;
+          width: 49%;
           margin-bottom: 3rem;
-          & >div{
+          margin-left: 1rem;
+          & > div {
             position: relative;
             bottom: 2.5rem;
             left: -7.5%;
@@ -157,6 +195,9 @@
             text-align: center;
             font-weight: 500;
           }
+          table {
+            height: 630px !important;
+          }
         }
 
         ul {
@@ -167,7 +208,7 @@
           margin: 3.7rem 0;
           padding: 0;
           justify-content: center;
-          font-size:18px;
+          font-size: 18px;
           li {
             width: fit-content;
             border-bottom: 2px solid #9f9f9f;
@@ -202,6 +243,7 @@
           font-size: 18px;
           position: relative;
           left: 4%;
+          top: -2rem;
           mat-form-field.mat-mdc-form-field {
             width: 100%;
           }
@@ -288,8 +330,8 @@ table tr td:first-child {
     border-top: none;
     img {
       width: 250px;
-    margin: 0;
-    padding: 8px;
+      margin: 0;
+      padding: 8px;
     }
     .title {
       width: 100%;
@@ -306,9 +348,9 @@ table tr td:first-child {
         padding-bottom: 5px;
         font-weight: 500;
       }
-      h2{
-       font-size: 20px;
-       font-weight: 900;
+      h2 {
+        font-size: 20px;
+        font-weight: 900;
       }
 
       p {
@@ -327,7 +369,7 @@ table tr td:first-child {
     margin-top: 1.5rem;
     column-gap: 3rem;
     width: 99%;
-    &> p:first-child{
+    & > p:first-child {
       grid-area: 1 / span 2;
       display: flex !important;
       align-items: center;
@@ -347,14 +389,22 @@ table tr td:first-child {
         font-size: 18px;
       }
     }
-    .date{
-    column-gap: 35%;
+    .date {
+      column-gap: 35%;
     }
     .sondeo-capa {
       display: flex;
       gap: 1rem;
-      grid-area: 4/span 2;
+      grid-area: 4 / span 2;
       margin: auto;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.5s;
+      &:hover{
+        transform: scale(1.1);
+        color: #008380;
+        transition: transform 0.5s;
+      }
       p {
         justify-content: center !important;
         gap: 1rem;
