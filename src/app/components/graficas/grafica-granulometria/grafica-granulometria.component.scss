@@ -1,15 +1,26 @@
 .content-chart{
-    background: #008380;
+    background: rgb(43, 154, 166);
     width: fit-content;
-    padding: 3rem;
+    padding: 2rem;
     margin-top: 1rem;
-    margin-left: 1rem;
+    margin-left: 12px;
     padding-bottom: 1rem;
     border-radius: 10px;
-  }
+    position:relative;
+    .curva {
+       padding: 0;
+       margin: 0;
+       position: absolute;
+       top: 1.5%;
+       left: 30%;
+       color: #fff;
+       font-size: 19px;
+       font-weight: 500;
+    }
+}
   .chart-content{
-    width:40vw !important;
-    height:60vh !important;
+    width:38vw !important;
+    height:58vh !important;
     display: flex;
     background: transparent;
     position:relative;
@@ -26,9 +37,10 @@ canvas{
         padding: 0.2rem 1rem;
         position: absolute;
         top: 45%;
-        left: -13.5%;
-        font-size: 19px;
+        left: -13.4%;
+        font-size: 16px;
         color: white;
+        font-weight:500;
       }
   }
 
@@ -37,7 +49,8 @@ canvas{
     margin: 0;
     text-align: center;
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 1rem;
+    font-weight: 500;
   }
 

@@ -14,6 +14,9 @@ export class FormHeaderComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   values: IHeader | null = null
   location: string = ''
+  referencia: string = ''
+  solicitante: string = ''
+  projectTitle: string = ''
   activeEdit = true
   projectIdValue: string | null = ""
   date: Date = new Date()
@@ -54,18 +57,27 @@ export class FormHeaderComponent implements OnInit {
   private buildForm() {
     this.form = this.fb.group({
       location: ['', [Validators.required]],
+      referencia: [''],
+      projectTitle: [''],
       TareWeight: [''],
       probe: [],
       layer: [],
-      sampleWeightH: ['']
+      sampleWeightH: [''],
+      solicitante: [''],
     });
   }
   save() {
     let formValue = this.form.value
     delete formValue.location;
+    delete formValue.projectTitle;
     delete formValue.probe;
+    delete formValue.referencia;
+    delete formValue.solicitante;
     this.values = formValue
     this.location = this.form.get('location')?.value
+    this.projectTitle = this.form.get('projectTitle')?.value
+    this.referencia = this.form.get('referencia')?.value
+    this.solicitante = this.form.get('solicitante')?.value
     if (this.values && this.projectIdValue) {
       this.projectService.createEnsayo(
         {
@@ -73,6 +85,9 @@ export class FormHeaderComponent implements OnInit {
           ensayo: 'header',
           id: this.projectIdValue,
           location: this.location,
+          projectTitle: this.projectTitle,
+          referencia: this.referencia,
+          solicitante: this.solicitante,
           sondeo: this.numberSondeo,
           layer: this.values.layer
         })
@@ -92,11 +107,22 @@ export class FormHeaderComponent implements OnInit {
   }
   updateData(projectData: IEnsayos, valueProbe: number, valueLayer: number) {
     if (valueProbe) {
+//      console.log(projectData,'projectData')
       const indexSondeo = valueProbe - 1
       const indexLayer = valueLayer - 1
       this.location = projectData.location
+      this.projectTitle = projectData.title
+      this.referencia = projectData.referencia
+      this.solicitante = projectData.solicitante
       this.numberSondeo = valueProbe
-      this.form.patchValue({ layer: valueLayer,location: projectData.location, probe: valueProbe })
+      this.form.patchValue({
+        layer: valueLayer,
+        location: projectData.location,
+        probe: valueProbe,
+        projectTitle:projectData.title,
+        referencia:this.referencia,
+        solicitante:this.solicitante
+      })
       const header = projectData.sondeos[indexSondeo].muestras[indexLayer]?.header
       if(header?.layer){
         header.layer = valueLayer
@@ -111,8 +137,9 @@ export class FormHeaderComponent implements OnInit {
       } else {
         this.form.patchValue({ sampleWeightH: '' })
       }
-      if(header?.TareWeight && header?.sampleWeightH){
-          this.activeEdit = false
+      if(header?.TareWeight && header?.sampleWeightH)
+      {
+        this.activeEdit = false
       }else{
         this.activeEdit = true
       }

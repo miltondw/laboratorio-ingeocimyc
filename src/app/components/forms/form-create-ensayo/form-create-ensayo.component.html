@@ -23,9 +23,36 @@
 >
 Este campo es requerido
 </mat-error>
+<mat-form-field appearance="outline">
+  <mat-label>referencia</mat-label>
+  <input matInput autocomplete="street-address" formControlName="referencia">
+</mat-form-field>
+<mat-error
+*ngIf="
+  form.get('referencia')?.hasError('required') &&
+  form.get('referencia')?.touched
+"
+>
+Este campo es requerido
+</mat-error>
+<div class="solicitante">
+<mat-form-field appearance="outline">
+  <mat-label>solicitante</mat-label>
+  <input matInput autocomplete="street-address" formControlName="solicitante">
+</mat-form-field>
+<mat-error
+*ngIf="
+  form.get('solicitante')?.hasError('required') &&
+  form.get('solicitante')?.touched
+"
+>
+Este campo es requerido
+</mat-error>
   <mat-form-field appearance="outline">
     <mat-label>Cantidad de sondeos</mat-label>
     <input matInput autocomplete="on" type="number" formControlName="probe">
   </mat-form-field>
+</div>
+
   <button class="btn_primary" (click)="onSubmit()">Enviar</button>
 </form>

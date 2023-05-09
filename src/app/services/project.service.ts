@@ -3,10 +3,11 @@ import { IProject } from '@app/models/project.model'
 import { IDto, IEnsayos } from '@app/models/Ensayos.model'
 import { IHeader } from '@app/models/formHeader.model'
 import { IHumedad } from '@app/models/ensayoDeHumedad.model'
-import { IGranulometria } from '@app/models/ensayoDeGranulometria.model'
+import { IGranulometria ,ISucsData} from '@app/models/ensayoDeGranulometria.model'
 import { IGroup as ILiquido } from '@app/models/ensayoDeLimiteLiquido.model'
 import { IGroup as IPlastico } from '@app/models/ensayoDelimitePlastico.model'
 import { LaboratorioService } from './laboratorio.service'
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -49,10 +50,13 @@ export class ProjectService {
       probe: project.probe,
       title: project.title,
       location: project.location,
+      referencia: project.referencia,
+      solicitante: project.solicitante,
       date: new Date(),
       sondeos: []
     }
-    projectInitial.id = project.title.split(' ').join('-').toLocaleLowerCase()
+    // projectInitial.id = project.title.split(' ').join('-').toLocaleLowerCase()
+    projectInitial.id = uuidv4();
     for (let sondeos = 1; sondeos <= projectInitial.probe; sondeos++) {
       const sondeo = {
         sondeo: sondeos,
@@ -74,6 +78,7 @@ export class ProjectService {
   createEnsayo(Dto: IDto) {
     const { project, index } = this.getProject(Dto.id)
     if (Dto.location) project.location = Dto.location
+    if (Dto.projectTitle) project.title = Dto.projectTitle
     //Fase 2
     if (Dto.ensayo && Dto.sondeo && Dto.layer) {
       const iSondeo = Dto.sondeo - 1
@@ -86,7 +91,38 @@ export class ProjectService {
           break;
         case 'ensayoGranulometria':
           if (Dto.ensayoGranulometria) {
-            project.sondeos[iSondeo].muestras[iLayer]['ensayoGranulometria'] = Dto.ensayoGranulometria;
+            const granulometria=project.sondeos[iSondeo].muestras[iLayer]['ensayoGranulometria']
+            const observation=Dto.ensayoGranulometria?.observation
+            delete Dto.ensayoGranulometria?.observation
+            granulometria.tamices = Dto.ensayoGranulometria;
+            const tamices:number[]=Object.values(Dto.ensayoGranulometria)
+            const total=tamices.reduce((dc:number, va:number) => dc + va, 0)
+            const retenido=tamices.map((tamice)=>{
+              const retenido=((tamice/total)*100)
+              return Number(retenido.toFixed(2))
+            })
+            const acum=[0]
+            for (let i = 1; i < retenido.length; i++) {
+              const porcentajeacum = Number((retenido[i] + acum[i - 1]).toFixed(2));
+              acum.push(porcentajeacum);
+            }
+            const pasa=acum.map((ac:number)=>Number((100-ac).toFixed(2)))
+            const subRetenido=retenido.slice(0,6)
+            const grava=subRetenido.reduce((ac:number,va:number)=>ac+va,0)
+            const subRetenido2=retenido.slice(6,9)
+            const arena=subRetenido2.reduce((ac:number,va:number)=>ac+va,0)
+            const finos=pasa[pasa.length-2]
+            granulometria.data = {
+              total,
+              retenido,
+              acum,
+              pasa,
+              grava,
+              arena,
+              finos,
+              sucsData:'',
+              observation
+            }
           }
           break;
         case 'ensayoHumedad':
@@ -123,6 +159,15 @@ export class ProjectService {
     )
     this.laboratorioService.saveStorage(this.project, this.projectId, this.indexProject)
   }
+  createSucsData(sucsData:ISucsData){
+    const { project, index } = this.getProject(sucsData.id)
+    const granulometria=project.sondeos[sucsData.sondeo].muestras[sucsData.layer].ensayoGranulometria
+    granulometria.data.sucsData=sucsData.sucsData
+    this.projects[index] = project
+    this.project = this.projects[index]
+    this.laboratorioService.saveStorage(this.project, sucsData.id, index)
+  }
+
   createMuestra(sondeo: number) {
     let muestras = this.project.sondeos[sondeo].muestras
     muestras.push({
@@ -141,8 +186,8 @@ export class ProjectService {
   }
   deleteSondeo(id: string, indexSondeo: number) {
     const { project, index } = this.getProject(id)
-    project.sondeos.splice(indexSondeo,1)
-    project.probe=project.probe-1
+    project.sondeos.splice(indexSondeo, 1)
+    project.probe = project.probe - 1
     this.project = project
     this.laboratorioService.saveStorage(this.project, this.project.id, index)
   }

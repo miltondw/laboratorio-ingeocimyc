@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <h2 class="title">Limite Liquido</h2>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" [class.active]="activeEdit">
       <ng-container  matColumnDef="prueba">
         <th mat-header-cell *matHeaderCellDef>Prueba.</th>
         <td mat-cell *matCellDef="let element">{{ element.prueba }}</td>

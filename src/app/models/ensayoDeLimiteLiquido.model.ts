@@ -14,4 +14,5 @@ export interface IGroup{
   primera:ILimiteLiquido;
   segunda:ILimiteLiquido;
   tercera:ILimiteLiquido;
+  limiteLiquido?:number
 }

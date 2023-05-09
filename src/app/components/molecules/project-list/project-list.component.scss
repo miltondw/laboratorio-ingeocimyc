@@ -88,6 +88,9 @@ tr.example-element-row:not(.example-expanded-row):hover {
 tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
 }
+tr td:first-child {
+    width: 30%;
+}
 
 .example-element-row td {
   border-bottom-width: 0;
@@ -99,7 +102,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .example-element-symbol {
-  font-weight: bold;
+  font-weight: 900;
   font-size: 40px;
   line-height: normal;
 }

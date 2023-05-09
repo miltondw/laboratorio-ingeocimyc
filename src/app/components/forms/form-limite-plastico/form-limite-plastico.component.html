@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <h2 class="title">Limite Plástico</h2>
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" [class.active]="activeEdit">
       <ng-container matColumnDef="prueba">
         <th mat-header-cell *matHeaderCellDef>Prueba.</th>
         <td mat-cell *matCellDef="let element">{{ element.prueba }}</td>
@@ -13,7 +13,7 @@
            </p>
          <mat-form-field appearance="outline" *ngIf="activeEdit" >
            <mat-label>Primera</mat-label>
-           <input matInput [formControlName]="element.primera">
+           <input matInput type="number" [formControlName]="element.primera">
          </mat-form-field>
         </td>
       </ng-container>
@@ -25,7 +25,7 @@
            </p>
          <mat-form-field appearance="outline" *ngIf="activeEdit" >
            <mat-label>Segunda</mat-label>
-           <input matInput [formControlName]="element.primera">
+           <input matInput type="number" [formControlName]="element.primera">
          </mat-form-field>
         </td>
       </ng-container>

@@ -7,7 +7,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 
 export interface IProjectsList {
   id: string,
-  titile: string;
+  title: string;
   location: string;
   date: Date;
   sondeos: number[]
@@ -28,9 +28,10 @@ export interface IProjectsList {
   ],
 })
 export class ProjectListComponent implements OnInit {
-  displayedColumns: string[] = ['titile', 'location', 'date', 'delete','informe'];
+  displayedColumns: string[] = ['title', 'location', 'date', 'delete','informe'];
   projectsList: IProjectsList[] = []
-  dataSource = new MatTableDataSource(this.projectsList);
+   dataSource = new MatTableDataSource(this.projectsList);
+//  dataSource = this.projectsList;
   values: IEnsayos[] | null = null
   panelOpenState = false;
   activeDeleteSondeo = false
@@ -61,7 +62,7 @@ export class ProjectListComponent implements OnInit {
         id: project.id,
         date: project.date,
         location: project.location,
-        titile: project.title,
+        title: project.title,
         sondeos,
         capas,
       }

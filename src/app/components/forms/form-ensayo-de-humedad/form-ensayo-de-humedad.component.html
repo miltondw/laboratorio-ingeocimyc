@@ -1,20 +1,39 @@
 <form [formGroup]="form">
 <h2 class="title">Ensayo de humedad</h2>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="prueba">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" [class.active]="activeEdit">
+    <ng-container matColumnDef="prueba" >
       <th mat-header-cell *matHeaderCellDef>Prueba.</th>
-      <td mat-cell *matCellDef="let element">{{ element.prueba }}</td>
+      <td
+      mat-cell
+      *matCellDef="let element"
+      >
+        {{ element.prueba }}
+      </td>
     </ng-container>
-    <ng-container matColumnDef="primera">
-      <th mat-header-cell *matHeaderCellDef>1</th>
+    <ng-container *ngFor="let item of stringValues" [matColumnDef]="item" [formGroupName]="item">
+      <th mat-header-cell *matHeaderCellDef>M1</th>
       <td mat-cell *matCellDef="let element">
-        <p *ngIf="!activeEdit" >
-         {{values[element.primera]}}
-        </p>
-      <mat-form-field appearance="outline" *ngIf="activeEdit" >
-        <mat-label>{{element.prueba}}</mat-label>
-        <input matInput [type]="element.primera!=='DepthM'?'number':'text'" [formControlName]="element.primera">
-      </mat-form-field>
+        <ng-container *ngIf="!activeEdit && item && element.primera" >
+          <ng-container *ngIf="element.primera==='DepthM';else valuesItems"> 
+            <p>
+              {{depthM}}
+             </p>
+          </ng-container>
+          <ng-template #valuesItems>
+            <p>
+              {{values[item][element.primera]}}
+            </p>
+          </ng-template>
+          </ng-container>
+
+        <mat-form-field appearance="outline" *ngIf="activeEdit" >
+          <mat-label>{{element.prueba}}</mat-label>
+          <input
+            matInput
+            [type]="element.primera!=='DepthM'?'number':'text'"
+            [formControlName]="element.primera"
+          >
+        </mat-form-field>
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -30,9 +49,9 @@
         </label>
         <textarea formControlName="observation" name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
       </div>
-    <div class="cilindro" *ngIf="project.probe" >
+    <div class="cilindro" *ngIf="project.probe " >
       <img width="110" height="110" src="/assets/cilindro.svg" alt="cilindro">
-      <div *ngIf="!activeEdit">
+      <div *ngIf="!activeEdit && values.cylinder?.diameter">
         <p>
           Diámetro: {{values.cylinder.diameter}}
          </p>

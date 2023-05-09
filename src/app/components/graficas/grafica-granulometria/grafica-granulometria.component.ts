@@ -15,7 +15,6 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
     this.porcentajeQuePasa = value;
   }
   porcentajeQuePasa:number[] = [100, 100, 99.23, 98.54, 98.04, 95.17, 90.58, 72.60, 34.52]
-  //Const
   tamices:number[] = [50.80, 25.40, 19, 12.70, 9.53, 4.75, 2, 0.425, 0.075]
 
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
@@ -51,14 +50,14 @@ export class GraficaGranulometriaComponent implements AfterViewInit {
       maintainAspectRatio: false,
       elements: {
         point: {
-          radius: 6,
-          borderWidth: 2,
-          hoverRadius: 8,
-          hoverBorderWidth: 3,
+          radius: 3,
+          borderWidth: 1,
+          hoverRadius: 4,
+          hoverBorderWidth: 2,
 
         },
         line: {
-          borderWidth: 3,
+          borderWidth: 2,
           tension: 0.3,
         },
       },

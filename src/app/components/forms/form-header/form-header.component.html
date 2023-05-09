@@ -1,5 +1,14 @@
 <form [formGroup]="form" >
   <div class="content_field location">
+    <p *ngIf="projectTitle && !activeEdit" >
+      Proyecto: <span>{{projectTitle}} </span>
+    </p>
+    <mat-form-field *ngIf="!projectTitle || activeEdit" appearance="outline">
+      <mat-label>Proyecto</mat-label>
+      <input matInput formControlName="projectTitle" />
+    </mat-form-field>
+  </div>
+  <div class="content_fields" >
     <p *ngIf="location && !activeEdit" >
       Localización: <span>{{location}} </span>
     </p>
@@ -15,16 +24,23 @@
   >
     Este campo es requerido
   </mat-error>
-  <p class="date">{{date | date:'dd-MM-yyyy' }}</p>
-  </div>
-  <div class="content_fields" >
     <div class="content_field">
-      <p *ngIf="values?.TareWeight && !activeEdit" >
-        Peso Tara: <span>{{values?.TareWeight}} </span>
+      <p *ngIf="referencia && !activeEdit" >
+        referencia: <span>{{referencia}} </span>
     </p>
-      <mat-form-field appearance="outline" *ngIf="!values?.TareWeight || activeEdit" >
-        <mat-label>Peso Tara</mat-label>
-        <input matInput formControlName="TareWeight" type="number" />
+      <mat-form-field appearance="outline" *ngIf="!referencia || activeEdit" >
+        <mat-label>referencia</mat-label>
+        <input matInput formControlName="referencia" />
+      </mat-form-field>
+    </div>
+    <p class="date">Fecha: <span>{{date | date:'dd-MM-yyyy' }}</span></p>
+    <div class="content_field">
+      <p *ngIf="solicitante && !activeEdit" >
+        Solicitante: <span>{{solicitante}} </span>
+    </p>
+      <mat-form-field appearance="outline" *ngIf="!solicitante || activeEdit" >
+        <mat-label>Solicitante</mat-label>
+        <input matInput formControlName="solicitante" />
       </mat-form-field>
     </div>
     <div *ngIf="project.probe" class="content_field">
@@ -52,6 +68,15 @@
       <mat-form-field appearance="outline" *ngIf="!values?.sampleWeightH || activeEdit" >
         <mat-label>Peso Muestra H</mat-label>
         <input matInput formControlName="sampleWeightH" type="number" />
+      </mat-form-field>
+    </div>
+    <div class="content_field">
+      <p *ngIf="values?.TareWeight && !activeEdit" >
+        Peso Tara: <span>{{values?.TareWeight}} </span>
+    </p>
+      <mat-form-field appearance="outline" *ngIf="!values?.TareWeight || activeEdit" >
+        <mat-label>Peso Tara</mat-label>
+        <input matInput formControlName="TareWeight" type="number" />
       </mat-form-field>
     </div>
     <button class="btn_primary" *ngIf="activeEdit" type="button" (click)="onSubmit()">

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService } from '@app/services/project.service'
 import { Router } from '@angular/router'
 import { IProject } from '@app/models/project.model'
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class FormCreateEnsayoComponent {
     this.form = this.fb.group({
       title: ['', Validators.required],
       location: ['', Validators.required],
+      referencia: ['', Validators.required],
+      solicitante: ['', Validators.required],
       probe: ['']
     });
   }
@@ -34,12 +37,12 @@ export class FormCreateEnsayoComponent {
     if (this.form.valid) {
       this.values = this.form.value
       if (this.values) {
+        this.values.id = uuidv4();
         this.projectService.createProject(this.values)
-        const id = this.values.title.split(' ').join('-').toLocaleLowerCase()
         if (this.values.probe) {
-          this.router.navigate([`laboratorio/ensayo/${id}`], { queryParams: { probe: '1', layer:'1' } });
+          this.router.navigate([`laboratorio/ensayo/${this.values.id}`], { queryParams: { probe: '1', layer:'1' } });
         } else {
-          this.router.navigate([`laboratorio/ensayo/${id}`])
+          this.router.navigate([`laboratorio/ensayo/${this.values.id}`])
         }
       }
     } else {

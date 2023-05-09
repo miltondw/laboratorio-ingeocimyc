@@ -107,7 +107,8 @@ export class FormGranulometriaComponent {
   }
 
   update(ISondeo: number, ICapa: number) {
-    const granulometria = this.project.sondeos[ISondeo - 1].muestras[ICapa - 1]?.ensayoGranulometria
+    const granulometria = this.project.sondeos[ISondeo - 1].muestras[ICapa - 1]?.ensayoGranulometria?.tamices
+    if(granulometria){
     if (Object.keys(granulometria).length === 0) {
       this.form.reset()
       this.activeEdit = true
@@ -117,4 +118,5 @@ export class FormGranulometriaComponent {
     }
     this.values = this.form.value
   }
+}
 }

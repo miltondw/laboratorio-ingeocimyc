@@ -4,7 +4,7 @@ nav {
   width: 150px;
   z-index:100;
   button {
-    background: #008380;
+    background: rgb(43, 154, 166);
     color: white;
     outline: none;
     font-size: 18px;
@@ -18,11 +18,11 @@ nav {
   }
   ul {
     list-style: none;
-    background: #008380;
+    background: rgb(43, 154, 166);
     margin: 0;
     padding: 1rem;
     box-shadow: 1px 1px 12px 0px;
-    width: auto;
+    width: 100%;
     position: absolute;
     transform: translateX(-125%);
     transition: 300ms transform;

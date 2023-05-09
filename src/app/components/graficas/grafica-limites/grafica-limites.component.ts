@@ -1,8 +1,20 @@
+import { ProjectService } from '@app/services/project.service';
 import { Component, ViewChild, AfterViewInit, ElementRef, Input } from '@angular/core';
 import { Chart, ChartConfiguration, ChartEvent, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { default as Annotation } from 'chartjs-plugin-annotation';
 import { calcularTendencia } from '@app/utils/tendencia';
+import { IGroup } from '@app/models/ensayoDeLimiteLiquido.model'
+
+
+interface IValores{
+  id:string
+  ensayoLiquido:IGroup
+  sondeo:number
+  layer:number
+  porcentajeHumedad: number[]
+   numeroDeGolpes: number[]
+}
 
 @Component({
   selector: 'app-grafica-limites',
@@ -11,13 +23,23 @@ import { calcularTendencia } from '@app/utils/tendencia';
 })
 
 export class GraficaLimitesComponent implements AfterViewInit {
-
+  constructor(
+      private projectService:ProjectService
+    ){}
   @Input()
-  set SetValoresXY({ porcentajeHumedad, numeroDeGolpes }: { 
-    porcentajeHumedad: number[], numeroDeGolpes: number[] }) {
+  set SetValoresXY({ porcentajeHumedad, numeroDeGolpes,ensayoLiquido,sondeo,layer,id}:IValores) {
     this.porcentajeHumedad = porcentajeHumedad;
     this.numeroDeGolpes = numeroDeGolpes;
     this.limiteLiquido = calcularTendencia(numeroDeGolpes,porcentajeHumedad);
+    ensayoLiquido.limiteLiquido=Number(this.limiteLiquido.toFixed(2))
+    this.projectService.createEnsayo(
+      {
+        ensayoLiquido,
+        ensayo: 'ensayoLiquido',
+        id,
+        sondeo,
+        layer
+      })
     this.crearGrafica()
   }
 
@@ -45,8 +67,9 @@ export class GraficaLimitesComponent implements AfterViewInit {
           ],
           type: 'line',
           label: `Tendencia=${this.limiteLiquido}`,
-          backgroundColor: 'rgba(51,51,255,0.2)',
-          borderColor: 'rgba(51,51,225,1)',
+          backgroundColor: 'red',
+          borderColor: 'red',
+          pointBackgroundColor:'rgba(0,0,0,0.9)',
           borderDash: [5, 5],
           fill: false,
         },
@@ -57,8 +80,9 @@ export class GraficaLimitesComponent implements AfterViewInit {
           })),
           type: 'line',
           label: 'Golpes',
-          backgroundColor: 'rgba(255, 99, 132, 1)',
-          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'red',
+          borderColor: 'red',
+          pointBackgroundColor:'rgba(0,0,0,0.9)',
           fill: false,
         },
       ],
@@ -67,17 +91,15 @@ export class GraficaLimitesComponent implements AfterViewInit {
       aspectRatio: 1.5,
       responsive: true,
       maintainAspectRatio: false,
-      backgroundColor: 'rgba(255, 99, 132, 1)',
-      color: 'rgba(0,0,0,1)',
       elements: {
         point: {
-          radius: 6,
-          borderWidth: 2,
-          hoverRadius: 8,
-          hoverBorderWidth: 3,
+          radius: 3,
+          borderWidth: 1,
+          hoverRadius: 4,
+          hoverBorderWidth: 2,
         },
         line: {
-          borderWidth: 3,
+          borderWidth: 2,
           tension: 0.3,
         },
       },
@@ -111,10 +133,10 @@ export class GraficaLimitesComponent implements AfterViewInit {
           min: this.porcentajeHumedad[0] - 1,
           max: Math.max(...this.porcentajeHumedad) + 0.2,
           ticks: {
-            stepSize: 0.2,
+            stepSize: 1,
             color: 'rgba(0,0,0,1)',
             callback: function (value) {
-              return Number(value).toFixed(2);
+              return Math.ceil(Number(value));
             },
             font: {
               size: 16,

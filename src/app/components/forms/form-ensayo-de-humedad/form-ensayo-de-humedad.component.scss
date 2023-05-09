@@ -7,3 +7,11 @@
   display: grid;
   gap: 1rem;
 }
+
+.active{
+    tr.mat-mdc-row.mdc-data-table__row.cdk-row:nth-child(5), 
+    tr.mat-mdc-row.mdc-data-table__row.cdk-row:nth-child(6),
+    tr.mat-mdc-row.mdc-data-table__row.cdk-row:nth-child(7){
+      display: none !important;
+  }
+}

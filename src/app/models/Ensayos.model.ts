@@ -5,7 +5,9 @@ import {IGroup as ILiquido} from './ensayoDeLimiteLiquido.model'
 import {IGroup as IPlastico } from './ensayoDelimitePlastico.model';
 export interface IEnsayos{
   id:string,
-  title:string
+  title:string;
+  referencia:string;
+  solicitante:string;
   probe:number;
   date:Date;
   sondeos:ISondeoData[]
@@ -18,9 +20,9 @@ interface ISondeoData{
 interface IMuestras{
   header:IHeader;
   ensayoHumedad:IHumedad;
-  ensayoGranulometria:IGranulometria;
-  ensayoLiquido:ILiquido;
-  ensayoPlastico:IPlastico;
+  ensayoGranulometria:IGranulometria | any;
+  ensayoLiquido:ILiquido | any;
+  ensayoPlastico:IPlastico | any;
 }
 export interface IDto{
   id:string
@@ -28,9 +30,12 @@ export interface IDto{
   sondeo?:number;
   layer?:number;
   location?:string;
+  projectTitle?:string;
+  referencia?:string;
+  solicitante?:string;
   header?:IHeader;
   ensayoHumedad?:IHumedad;
-  ensayoGranulometria?:IGranulometria;
+  ensayoGranulometria?:IGranulometria|any;
   ensayoLiquido?:ILiquido;
   ensayoPlastico?:IPlastico;
 }

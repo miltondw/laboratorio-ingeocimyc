@@ -17,6 +17,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 //Pages
 import { EnsayosComponent } from './pages/ensayos/ensayos.component';
 import { CrearEnsayoComponent } from './pages/crear-ensayo/crear-ensayo.component';
@@ -42,6 +43,7 @@ import { GraficaGranulometriaComponent } from './components/graficas/grafica-gra
 import { GraficasEnsayosComponent } from './components/graficas/graficas-ensayos/graficas-ensayos.component';
 //Others
 import { PdfExampleComponent } from './components/pdf-example/pdf-example.component';
+import { ToFixedPipe } from './pipes/to-fixed.pipe';
 
 @NgModule({
   declarations: [
@@ -64,7 +66,8 @@ import { PdfExampleComponent } from './components/pdf-example/pdf-example.compon
     GraficaLimitesComponent,
     GraficaGranulometriaComponent,
     GraficasEnsayosComponent,
-    InformeEnsayosComponent
+    InformeEnsayosComponent,
+    ToFixedPipe,
   ],
   imports: [
     BrowserModule,
@@ -81,7 +84,8 @@ import { PdfExampleComponent } from './components/pdf-example/pdf-example.compon
     MatTableModule,
     MatIconModule,
     MatExpansionModule,
-    NgChartsModule
+    NgChartsModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

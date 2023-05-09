@@ -1,4 +1,5 @@
 export interface IGranulometria{
+  tamices:{
   inches2:number;
   inches1:number;
   inches34:number;
@@ -9,4 +10,22 @@ export interface IGranulometria{
   inchesN40:number;
   inchesN200:number;
   inchesP200:number;
+  }
+  data?:{
+  total:number;
+  retenido:number[]
+  acum:number[]
+  pasa:number
+  grava:number
+  arena:number
+  finos:number
+  sucsData:string
+  observation:string
+  }
+}
+export interface ISucsData{
+  sucsData:string
+  id:string
+  sondeo:number
+  layer:number
 }
